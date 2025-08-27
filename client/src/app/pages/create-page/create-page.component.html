@@ -1,0 +1,14 @@
+<div id="create-page-container">
+    <div id="create-page-header">
+        <app-header [onClick]="this.navigateToMenu.bind(this)" [stepNumber]="'1'" [title]="'CRÉER UNE PARTIE'"></app-header>
+    </div>
+    <div id="admin-page-border">
+        <div id="admin-page-body">
+            <div id="game-grid">
+                @for(game of games; let i = $index; track game._id) {
+                    <app-game-card [game]="game" [isAdminView]="false" [cardColor]="getCardColor(i)" (join)="createMatch(game)"> </app-game-card>
+                }
+            </div>
+        </div>
+    </div>
+</div>

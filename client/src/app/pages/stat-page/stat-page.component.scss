@@ -1,0 +1,332 @@
+$gray-border-color: #636776;
+$wheat-border-color: #e9f6f7;
+$stripes-color1: #93d7eb;
+$stripes-color2: #ace6f6;
+$text-shadow-color: rgb(112, 112, 112);
+
+$page-border-width: 10px;
+$padding-wheat-border: 0.7vw;
+$stripes-size: 0.7vw;
+$font-size-header: 6.5vh;
+
+$font-family-title: 'pixel';
+
+$corner-square-size: 1vh;
+$clip-path: polygon(
+    $corner-square-size 0%,
+    calc(100% - #{$corner-square-size}) 0%,
+
+    calc(100% - #{$corner-square-size}) $corner-square-size,
+    100% $corner-square-size,
+
+    100% calc(100% - #{$corner-square-size}),
+    calc(100% - #{$corner-square-size}) calc(100% - #{$corner-square-size}),
+    calc(100% - #{$corner-square-size}) 100%,
+    $corner-square-size 100%,
+
+    $corner-square-size calc(100% - #{$corner-square-size}),
+    0% calc(100% - #{$corner-square-size}),
+    0% $corner-square-size,
+    $corner-square-size $corner-square-size
+);
+
+* {
+    font-family: 'pixel';
+    color: #585851;
+}
+
+#stat-page-header {
+    height: 7vh;
+}
+
+#stat-page-border {
+    height: calc(100vh - 7vh);
+    border: $page-border-width solid $gray-border-color;
+}
+
+#stat-page-body {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    background: repeating-linear-gradient(
+        0deg,
+        $stripes-color1,
+        $stripes-color1 $stripes-size,
+        $stripes-color2 $stripes-size,
+        $stripes-color2 $stripes-size * 2
+    );
+    background-size: 100% ($stripes-size * 2);
+    animation: fall 2s linear infinite;
+    box-sizing: border-box;
+
+    border: $page-border-width solid $wheat-border-color;
+    padding: $page-border-width $page-border-width;
+
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+}
+
+@keyframes fall {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 0 $stripes-size * 2;
+    }
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+#top-stats-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0 3%;
+}
+
+#bottom-stats-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0 3% 0 0;
+}
+
+#match-stats-container,
+#player-stats-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    padding: 1% 0;
+    position: relative;
+}
+
+.container-border {
+    height: 100%;
+    width: auto;
+    pointer-events: none;
+    user-select: none;
+}
+
+.container-body {
+    background-image: url('../../../assets/images/menu/containers/combat-container/combat-container-body.png');
+    background-size: 100% 100%;
+    flex: 1;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#player-stats-container .container-body {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding: 4vh 1vh;
+    overflow-x: auto;
+}
+
+#player-stats-container .stat-column {
+    display: grid;
+    grid-template-rows: 15% 85%;
+    height: 100%;
+    margin: 0 1% 0 0;
+    min-width: min-content;
+    flex-shrink: 0;
+    padding: 0 0 0 0.5vw;
+}
+
+#player-stats-container .stat-title {
+    font-size: 3.5vh;
+    text-align: center;
+    user-select: none;
+    cursor: pointer;
+    height: 100%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#player-stats-container .stat-title:hover {
+    opacity: 0.8;
+}
+
+#player-stats-container .stat-title:active {
+    opacity: 0.5;
+}
+
+.sort-icon {
+    height: 100%;
+    aspect-ratio: 1/1;
+    background-size: 55% 55%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.sort-icon.ascending {
+    background-image: url('../../../assets/images/menu/icons/arrows/sort-asc.png');
+}
+
+.sort-icon.descending {
+    background-image: url('../../../assets/images/menu/icons/arrows/sort-des.png');
+}
+
+#player-stats-container .stat-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    height: 100%;
+    padding: 0.5vh 0;
+}
+
+#player-stats-container .stat-value {
+    font-size: 3.5vh;
+    text-align: center;
+    user-select: none;
+    width: 100%;
+}
+
+#player-stats-container .stat-separator {
+    background-color: #9a9a9a;
+    width: 0.25vw;
+    height: 100%;
+    display: grid;
+    height: 85%;
+    flex-shrink: 0;
+    align-self: flex-end;
+}
+
+#match-stats-container .container-body {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    padding: 6vh 1vh;
+}
+
+#match-stats-container .main-stats-container {
+    width: 60%;
+    height: 80%;
+    overflow: visible;
+}
+
+#match-stats-container .match-stat {
+    display: grid;
+    grid-template-columns: 75% 25%;
+    width: 100%;
+    font-size: 2vw;
+}
+#match-stats-container .match-stat,
+#match-stats-container .stat-value {
+    overflow: visible;
+    font-size: min(4vh, 2vw);
+}
+
+#match-stats-container .match-winner-container {
+    margin-top: 4%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 50%;
+    overflow: visible;
+}
+
+#match-stats-container .match-winner-container img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+#match-stats-container .match-winner-container .winner-title {
+    position: absolute;
+    font-size: 2.4vw;
+    text-align: center;
+    width: 100%;
+    top: 17%;
+}
+#match-stats-container .match-winner-container .winner-battle-platform {
+    width: min(40vh, 30vw);
+    transform: translate(-50%, -10%);
+}
+
+#match-stats-container .match-winner-container .winner-avatar {
+    width: min(15vh, 10vw);
+    transform: translate(-50%, -50%);
+}
+
+#match-stats-container .match-winner-container .evolved {
+    width: min(20vh, 15vw);
+}
+
+#chat-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: 0 0 0 2%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+#chat-container > * {
+    max-width: 100%;
+    max-height: 100%;
+    overflow: auto;
+}
+
+.self {
+    background-color: rgba(255, 165, 0, 0.25);
+}
+
+.rouge {
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
+.bleu {
+    background-color: rgba(134, 186, 255, 0.3);
+}
+$surrender-button: '../../../assets/images/menu/buttons/play/surrender-button.png';
+$surrender-button-hover: '../../../assets/images/menu/buttons/play/surrender-button-hover.png';
+$surrender-button-click: '../../../assets/images/menu/buttons/play/surrender-button-click.png';
+
+#quit-button {
+    position: absolute;
+    bottom: 6vh;
+    left: 1vw;
+    height: min(5.5vh, 5.5vw);
+    width: min(24.5vh, 24.5vw);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: min(3.5vh, 3.5vw);
+    color: black;
+    background-color: white;
+
+    background-image: url($surrender-button);
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    cursor: pointer;
+    user-select: none;
+}
+
+#quit-button:hover {
+    background-image: url($surrender-button-hover);
+    color: whitesmoke;
+}
+#quit-button:active {
+    background-image: url($surrender-button-click);
+}

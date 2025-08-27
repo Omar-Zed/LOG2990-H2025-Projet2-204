@@ -1,0 +1,470 @@
+$header-height: 7vh;
+$main-height: calc(100vh - $header-height);
+$main-width: 100vw;
+$margin-top: calc($header-height * 0.6);
+$margin-bot: calc($header-height * 0.9);
+$map-size: calc($main-height - $margin-top - $margin-bot);
+$side-width-1: calc(($main-width - $map-size) * 0.5 - $margin-top * 1.6);
+$side-width-2: calc(($map-size - $margin-top) * 0.5);
+$side-width: min($side-width-1, $side-width-2);
+$side-height: min($side-width * 2 + $margin-top);
+
+$final-map-size: calc($map-size * 0.5 + $side-height * 0.5);
+$final-margin-top: calc($margin-top + ($main-height - $final-map-size - $margin-top - $margin-bot) * 0.45);
+$final-margin-bot: calc($main-height - $final-map-size - $final-margin-top);
+$final-side-width: calc(($final-map-size - $margin-top) * 0.5);
+$final-side-height: min($final-side-width * 2 + $margin-top);
+$final-margin-side: calc(($main-width - $final-map-size - $final-side-width - $final-side-width) * 0.25);
+$final-margin-right: min(calc((($final-margin-side - $margin-top) * 0.6 + $margin-top) * 0.9), calc($margin-top * 4));
+$final-margin-left: calc($final-margin-side * 2 - $final-margin-right);
+
+$tile-padding: calc($final-side-width * 0.1);
+$item-padding: calc($final-side-width * 0.06);
+$item-size: calc(($final-side-width - $item-padding - $item-padding) * 0.333333);
+$stripes-size: 2.5vh;
+$stripes-animation-duration: 4s;
+$size-effectivness: 0.78;
+$hover-item-size: calc($item-size * 7.1 / ((var(--size) - 10) * $size-effectivness + 10));
+
+$text-color: rgb(255, 255, 255);
+$main-border-color1: #636776;
+$main-border-color2: #e9f6f7;
+$main-border-width: calc($map-size * 0.01);
+$stripes-color1: hsl(225, 6%, 15%);
+$stripes-color2: hsl(220, 6%, 20%);
+$tool-active-color: rgba(255, 255, 255, 0.6);
+$tile-border-color: rgba(255, 255, 255, 0.5);
+$input-border-color: rgba(255, 255, 255, 0.82);
+$input-bg-normal: hsla(231, 12%, 45%, 0.7);
+$input-bg-active: hsla(231, 12%, 45%, 0.6);
+$item-count-bg-color: hsla(231, 12%, 45%, 0.7);
+$tool-normal-border: calc($final-side-width * 0.01) solid rgba(255, 255, 255, 0);
+$tool-hover-border: calc($final-side-width * 0.01) solid rgba(255, 255, 255, 0.7);
+$tool-active-border: calc($final-side-width * 0.01) solid rgba(255, 255, 255, 0);
+
+$gray-box-square: '../../../assets/images/menu/containers/gray/square.png';
+$gray-box-rectangle: '../../../assets/images/menu/containers/gray/rectangle.png';
+
+.editor-page {
+    height: 100vh;
+    width: 100vw;
+}
+
+.editor-page * {
+    user-select: none;
+}
+
+main {
+    overflow: visible;
+    height: $main-height;
+    width: $main-width;
+    background: repeating-linear-gradient(
+        0deg,
+        $stripes-color1,
+        $stripes-color1 $stripes-size,
+        $stripes-color2 $stripes-size,
+        $stripes-color2 $stripes-size * 2
+    );
+    background-size: 100% ($stripes-size * 2);
+    animation: fall $stripes-animation-duration linear infinite;
+    color: $text-color;
+    position: relative;
+}
+
+main::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border: calc($main-border-width * 2) solid $main-border-color2;
+    outline: $main-border-width solid $main-border-color1;
+    outline-offset: calc($main-border-width * -1);
+}
+
+@keyframes fall {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 0 $stripes-size * 2;
+    }
+}
+
+.editor-center {
+    vertical-align: top;
+    overflow: visible;
+    display: inline-block;
+    margin-top: $final-margin-top;
+    height: calc($main-height - $final-margin-top);
+    width: $final-map-size;
+}
+
+app-map {
+    overflow: visible;
+    display: block;
+    height: $final-map-size;
+    width: $final-map-size;
+}
+
+.editor-left {
+    display: inline-block;
+    height: $final-side-height;
+    width: $final-side-width;
+    margin-top: $final-margin-top;
+    margin-bottom: $final-margin-bot;
+    margin-left: $final-margin-left;
+    margin-right: $final-margin-right;
+    padding: calc($final-side-width * 0.058) calc($final-side-width * 0.075);
+
+    background-image: url($gray-box-rectangle);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.editor-right {
+    vertical-align: top;
+    overflow: visible;
+    display: inline-block;
+    height: $final-side-height;
+    width: $final-side-width;
+    margin-top: $final-margin-top;
+    margin-bottom: $final-margin-bot;
+    margin-left: $final-margin-right;
+    margin-right: $final-margin-left;
+}
+
+.tool-square {
+    overflow: visible;
+    height: $final-side-width;
+    width: $final-side-width;
+    margin-bottom: $margin-top;
+
+    background-image: url($gray-box-square);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.tile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    padding: $tile-padding;
+    overflow: visible;
+}
+
+.item-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    padding: $item-padding;
+    overflow: visible;
+}
+
+.tile-grid .grid-square {
+    height: calc(($final-side-width - $tile-padding - $tile-padding) * 0.5);
+    width: calc(($final-side-width - $tile-padding - $tile-padding) * 0.5);
+    cursor: pointer;
+}
+
+.item-grid .grid-square {
+    height: $item-size;
+    width: $item-size;
+    cursor: grab;
+    overflow: visible;
+}
+
+.grid-square * {
+    pointer-events: none;
+    overflow: visible;
+}
+
+.tool {
+    display: grid;
+    margin: 2.5%;
+    width: 95%;
+    height: 95%;
+    border-radius: 10%;
+    border: $tool-normal-border;
+    pointer-events: none;
+}
+
+.item-grid .tool {
+    pointer-events: all;
+}
+
+.tool-description {
+    position: absolute;
+    z-index: 999;
+    grid-row: 1;
+    grid-column: 1;
+    pointer-events: none;
+    width: calc($final-map-size * 0.16 * 1.815);
+    height: calc($final-map-size * 0.16);
+    margin-top: calc($final-map-size * -0.3473);
+    margin-left: calc($final-map-size * 0.16 * 1.815 * -0.19);
+    font-size: calc($final-map-size * 0.03);
+    padding: calc($final-map-size * 0.012);
+    background: url('../../../assets/images/menu/containers/description-container.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    text-align: center;
+    color: black;
+    text-transform: none;
+    white-space: normal;
+    opacity: 0;
+    transition:
+        opacity ease 0.2s,
+        visibility 0s;
+}
+
+::ng-deep b {
+    display: block;
+    margin-bottom: calc($final-map-size * 0.008);
+}
+
+.grid-square:hover .tool-description {
+    opacity: 1;
+    transition:
+        opacity 0.6s ease 0.6s,
+        visibility 0.6s 0.6s;
+}
+
+.grab .grid-square:hover .tool-description {
+    opacity: 0;
+}
+
+app-item {
+    pointer-events: all;
+    grid-row: 1;
+    grid-column: 1;
+    width: 100%;
+    height: 100%;
+}
+
+.tool-count {
+    grid-row: 1;
+    grid-column: 1;
+    margin-left: calc($final-side-width * 0.155);
+    margin-top: calc($final-side-width * 0.155);
+    padding-left: calc($final-side-width * 0.005);
+    width: calc($final-side-width * 0.08);
+    height: calc($final-side-width * 0.08);
+    line-height: calc($final-side-width * 0.08);
+    font-size: calc($final-side-width * 0.08);
+    text-align: center;
+    border-radius: 300%;
+    background: $item-count-bg-color;
+}
+
+.tile-grid .tool {
+    grid-row: 1;
+    grid-column: 1;
+    margin: 5%;
+    width: 90%;
+    height: 90%;
+}
+
+.item-grid .tool {
+    margin: 2.5%;
+    width: 95%;
+    height: 95%;
+}
+
+.grid-square:hover .tool {
+    border: $tool-hover-border;
+}
+
+.tile-grid .grid-square:active .tool,
+.tile-grid .active .tool {
+    border: $tool-active-border;
+    background-color: $tool-active-color;
+}
+
+.tool-image {
+    grid-row: 1;
+    grid-column: 1;
+    margin: 12.5%;
+    width: 75%;
+    height: 75%;
+    border-radius: 8%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    pointer-events: none;
+}
+
+.tile-grid .tool-image {
+    box-shadow: 0 0 0 calc($final-side-width * 0.005) $tile-border-color;
+}
+
+.tile-grid .grid-square:active .tool-image {
+    box-shadow: none;
+}
+
+.input-name,
+.input-description {
+    resize: none;
+    display: block;
+    width: 100%;
+    height: calc($final-side-width * 0.13);
+    margin-top: calc($final-side-width * 0.01);
+    border-radius: calc($final-side-width * 0.015);
+    padding-top: calc($final-side-width * 0.029);
+    padding-bottom: calc($final-side-width * 0.03);
+    padding-left: calc($final-side-width * 0.04);
+    padding-right: calc($final-side-width * 0.04);
+
+    text-decoration: none;
+    outline: none;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    font-size: calc($final-side-width * 0.07);
+    background: $input-bg-normal;
+    font-family: 'pixel';
+    border: calc($final-side-width * 0.0085) solid transparent;
+    cursor: pointer;
+}
+
+.input-name:hover,
+.input-description:hover {
+    border-color: $input-border-color;
+}
+
+.input-name:active,
+.input-description:active {
+    background: $input-bg-active;
+}
+
+.input-description {
+    height: calc($final-side-width * 0.7);
+    padding-top: calc($final-side-width * 0.029);
+    padding-bottom: calc($final-side-width * 0.029);
+    padding-left: calc($final-side-width * 0.029);
+    padding-right: calc($final-side-width * 0.029);
+    margin-bottom: calc($final-side-width * 0.06);
+    word-wrap: break-word;
+    word-break: break-all;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.left-label {
+    font-size: calc($final-side-width * 0.1);
+    letter-spacing: calc($final-side-width * 0.006);
+}
+
+.left-label-small {
+    margin-top: calc($final-side-width * 0.03);
+    font-size: calc($final-side-width * 0.1);
+    letter-spacing: calc($final-side-width * 0.0002);
+}
+
+.left-label-medium {
+    margin-top: calc($final-side-width * 0.025);
+    font-size: calc($final-side-width * 0.095);
+    letter-spacing: calc($final-side-width * 0.0001);
+}
+
+.save-button,
+.reset-button {
+    display: block;
+    width: 100%;
+    height: calc($final-side-width * 0.13);
+    margin-top: calc($final-side-width * 0.03);
+    border-radius: calc($final-side-width * 0.015);
+
+    text-decoration: none;
+    outline: none;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background: $input-bg-normal;
+    font-family: 'pixel';
+    border: calc($final-side-width * 0.0085) solid transparent;
+    cursor: pointer;
+    font-size: calc($final-side-width * 0.085);
+    letter-spacing: calc($final-side-width * 0.0003);
+}
+
+.save-button:hover,
+.reset-button:hover {
+    border-color: $input-border-color;
+}
+
+.reset-button:active {
+    background: $input-bg-active;
+}
+
+.save-button {
+    background: hsl(203, 100%, 38%);
+    margin-top: calc($final-side-width * 0.21);
+}
+
+.save-button:active {
+    background: hsl(203, 100%, 42%);
+}
+
+.overlay {
+    position: absolute;
+    pointer-events: none;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.grab-item {
+    position: absolute;
+    pointer-events: none;
+    width: $hover-item-size;
+    height: $hover-item-size;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    transform: translateX(calc($hover-item-size * -0.5)) translateY(calc($hover-item-size * -0.5));
+    display: none;
+}
+
+.grab .grab-item {
+    display: block;
+}
+
+app-map {
+    cursor: pointer;
+}
+
+.grab * {
+    cursor: grabbing;
+}
+
+.error-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    padding: 6vw;
+    user-select: none;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+    align-items: center;
+}
+
+app-warning-confirmation-popup {
+    flex-shrink: 0;
+}

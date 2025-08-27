@@ -1,0 +1,125 @@
+<div>
+    <div id="page-header">
+        <app-header [onClick]="this.goToMenu.bind(this)" [stepNumber]="'2'" [title]="'SELECTIONNEZ VOTRE PERSONNAGE'"></app-header>
+    </div>
+    <div id="ps-page-body">
+        <main class="flex-container">
+            <section id="avatar-info-container" class="flex-container">
+                <div id="player-name-avatar">
+                    <div id="self-avatar-container">
+                        <img src="{{ visualData.selfAvatarimage }}" id="self-avatar" />
+                        <img src="./assets/images/menu/stat-bar/shadow.png" id="avatar-shadow" />
+                    </div>
+                    <span id="name-form">
+                        <input
+                            id="name-input"
+                            type="text"
+                            [formControl]="nameForm"
+                            maxlength="{{ visualData.nameMaxLength }}"
+                            placeholder="Entrez votre nom"
+                            autofocus
+                            autocomplete="off"
+                            style="text-transform: uppercase"
+                            (click)="this.audioService.playEffect(this.clickValue)"
+                        />
+                        <p id="input-border">----------------</p>
+                    </span>
+                </div>
+                <div id="stats-selection-container">
+                    <div id="bonus-selection-container">
+                        <div class="label">SELECTIONNEZ VOTRE BONUS:</div>
+                        <div class="selections-container">
+                            <div
+                                class="stat-container stat-container-bonus-1"
+                                [ngClass]="{ unselected: !visualData.isHpSelected }"
+                                (click)="visualData.isHpSelected = true; this.audioService.playEffect(this.clickValue)"
+                            >
+                                <img src="./assets/images/menu/icons/heart.png" class="stat-icon" />
+                                <div class="stat-body">
+                                    <div class="stat-label">+2 HP</div>
+                                    <div class="stat-value">{{ visualData.isHpSelected ? '6/6' : '4/4' }}</div>
+                                </div>
+                            </div>
+                            <div class="stat-separator">
+                                <img src="./assets/images/menu/icons/arrows/double-arrow.png" class="separator-icon" />
+                            </div>
+                            <div
+                                class="stat-container stat-container-bonus-2"
+                                [ngClass]="{ unselected: visualData.isHpSelected }"
+                                (click)="visualData.isHpSelected = false; this.audioService.playEffect(this.clickValue)"
+                            >
+                                <img src="./assets/images/menu/icons/lightning.png" class="stat-icon" />
+                                <div class="stat-body">
+                                    <div class="stat-label">+2 VIT</div>
+                                    <div class="stat-value">{{ !visualData.isHpSelected ? '6/6' : '4/4' }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="bonus-selection-container" class="dice">
+                        <div class="label">SELECTIONNEZ VOS DÉS:</div>
+                        <div class="selections-container">
+                            <div class="stat-container stat-container-dice-1" (click)="toggleBonusDice()">
+                                <img
+                                    src="./assets/images/menu/icons/d6-dice.png"
+                                    class="stat-icon d6-icon"
+                                    [ngClass]="{ visible: visualData.isAttackSelected, hidden: !visualData.isAttackSelected }"
+                                />
+                                <img
+                                    src="./assets/images/menu/icons/d4-dice.png"
+                                    class="stat-icon d4-icon"
+                                    [ngClass]="{ visible: !visualData.isAttackSelected, hidden: visualData.isAttackSelected }"
+                                />
+                                <div class="stat-body">
+                                    <div class="stat-label stat-label-dice">ATTAQUE</div>
+                                    <div class="stat-value">4/4</div>
+                                </div>
+                            </div>
+                            <div class="stat-separator">
+                                <img src="./assets/images/menu/icons/arrows/double-arrow.png" class="separator-icon" />
+                            </div>
+                            <div class="stat-container stat-container-dice-2" (click)="toggleBonusDice()">
+                                <img
+                                    src="./assets/images/menu/icons/d6-dice.png"
+                                    class="stat-icon d6-icon"
+                                    [ngClass]="{ visible: !visualData.isAttackSelected, hidden: visualData.isAttackSelected }"
+                                />
+                                <img
+                                    src="./assets/images/menu/icons/d4-dice.png"
+                                    class="stat-icon d4-icon"
+                                    [ngClass]="{ visible: visualData.isAttackSelected, hidden: !visualData.isAttackSelected }"
+                                />
+                                <div class="stat-body">
+                                    <div class="stat-label stat-label-dice">DÉFENSE</div>
+                                    <div class="stat-value">4/4</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="avatar-selection-container">
+                <div id="avatar-list">
+                    @for(avatar of visualData.avatarList; track avatar.name) {
+                    <div
+                        class="avatar-container"
+                        [class.locked]="avatar.isLocked"
+                        [class.selected]="avatar.isSelected"
+                        (click)="changeAvatar(avatar.avatar)"
+                        title="{{ avatar.name }}"
+                    >
+                        <img src="{{ avatar.image }}" class="avatar-select" />
+                    </div>
+                    }
+                </div>
+            </section>
+        </main>
+    </div>
+    <footer id="page-footer">
+        <div class="flex-container">
+            <button type="button" class="start-btn" [class.disabled]="!nameForm.valid || !visualData.isAvatarSelected" (click)="joinLobby()">
+                START GAME
+            </button>
+        </div>
+    </footer>
+</div>

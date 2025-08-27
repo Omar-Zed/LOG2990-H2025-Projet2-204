@@ -1,0 +1,26 @@
+<div id="popup-container">
+    <div id="popup-background"></div>
+    <div id="item-popup">
+        <div id="item-popup-container">
+            <div id="item-popup-header">
+                <div id="item-popup-title">Selectionnez l'item a déposer</div>
+            </div>
+            <div id="items-container">
+                <div class="item-choise" [ngClass]="{ 'selected-item': this.selectedItem === 0 }" (click)="this.selectedItem = 0">
+                    <app-item [itemType]="this.inventoryItems[0]" [showDescription]="true"></app-item>
+                </div>
+                <div class="item-choise" [ngClass]="{ 'selected-item': this.selectedItem === 1 }" (click)="this.selectedItem = 1">
+                    <app-item [itemType]="this.inventoryItems[1]" [showDescription]="true"></app-item>
+                </div>
+                <div class="item-choise" [ngClass]="{ 'selected-item': this.selectedItem === 2 }" (click)="this.selectedItem = 2">
+                    <app-item [itemType]="this.inventoryItems[2]" [showDescription]="true"></app-item>
+                </div>
+            </div>
+            <div id="button-container">
+                <div class="button">
+                    <app-pokeball-button [buttonContent]="'VALIDER'" [delay]="100" [onClickAction]="validateChoise.bind(this)"></app-pokeball-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

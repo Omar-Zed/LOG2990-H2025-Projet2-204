@@ -1,0 +1,451 @@
+$big-stripe-size: 64%;
+
+$blue-backround-color: #6ab7d7;
+$inner-shadow-width: min(0.5vw, 1vh);
+
+$blue-main-color: #7bcee6;
+$blue-sub-color: #aae7f7;
+$blue-inner-shadow:
+    inset $inner-shadow-width 0 0 0 #aae7f7,
+    inset calc($inner-shadow-width * -1) 0 0 0 #4ba6c6,
+    inset 0 $inner-shadow-width 0 0 #aae7f7,
+    inset 0 calc($inner-shadow-width * -1) 0 0 #4ba6c6;
+
+$green-main-color: rgb(125, 214, 136);
+$green-sub-color: rgb(179, 246, 168);
+$green-border-color: rgb(249, 248, 128);
+$green-inner-shadow:
+    inset $inner-shadow-width 0 0 0 #b3f6a8,
+    inset calc($inner-shadow-width * -1) 0 0 0 #7a9765,
+    inset 0 $inner-shadow-width 0 0 #b3f6a8,
+    inset 0 calc($inner-shadow-width * -1) 0 0 #7a9765;
+
+$pink-main-color: rgb(247, 186, 147);
+$pink-sub-color: rgb(247, 209, 216);
+$pink-border-color: rgb(249, 248, 128);
+$pink-inner-shadow:
+    inset $inner-shadow-width 0 0 0 #f7d1d8,
+    inset calc($inner-shadow-width * -1) 0 0 0 #e7a383,
+    inset 0 $inner-shadow-width 0 0 #f7d1d8,
+    inset 0 calc($inner-shadow-width * -1) 0 0 #e7a383;
+
+$card-width: 100%;
+$card-border-color: rgb(246, 119, 56);
+$card-body-border-width: min(0.7vw, 0.7vh);
+$corner-square-size: min(0.7vw, 0.7vh);
+$description-width: min(25vw, 25vh);
+
+$text-shadow-color: rgb(112, 112, 112);
+
+$clip-path: polygon(
+    $corner-square-size 0%,
+    calc(100% - #{$corner-square-size}) 0%,
+
+    calc(100% - #{$corner-square-size}) $corner-square-size,
+    100% $corner-square-size,
+
+    100% calc(100% - #{$corner-square-size}),
+    calc(100% - #{$corner-square-size}) calc(100% - #{$corner-square-size}),
+    calc(100% - #{$corner-square-size}) 100%,
+    $corner-square-size 100%,
+
+    $corner-square-size calc(100% - #{$corner-square-size}),
+    0% calc(100% - #{$corner-square-size}),
+    0% $corner-square-size,
+    $corner-square-size $corner-square-size
+);
+
+* {
+    font-family: 'pixel';
+    user-select: none;
+}
+
+.card-global-container {
+    position: relative;
+    overflow: visible;
+}
+
+.game-card {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 26 / 30;
+    border: calc($corner-square-size * 2) solid $card-border-color;
+    clip-path: $clip-path;
+    justify-self: center;
+    overflow: visible;
+}
+
+.card-body {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 65% 35%;
+    padding: $inner-shadow-width;
+
+    background: linear-gradient(to right, #aae7f7, #4ba6c6);
+    box-shadow: $blue-inner-shadow;
+    overflow: visible;
+}
+
+.green-card .card-body {
+    background: linear-gradient(to right, #b3f6a8, #7a9765);
+    box-shadow: $green-inner-shadow;
+}
+
+.pink-card .card-body {
+    background: linear-gradient(to right, #f7d1d8, #e7a383);
+    box-shadow: $pink-inner-shadow;
+}
+
+.game-thumbnail {
+    position: relative;
+    height: 100%;
+    width: auto;
+    background-color: $blue-backround-color;
+
+    overflow: visible;
+}
+
+.thumbnail {
+    height: 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    background-size: cover;
+    opacity: 0;
+    transition: opacity 0.36s;
+}
+
+.visible {
+    opacity: 1;
+}
+
+.game-thumbnail:hover {
+    filter: brightness(1.1);
+}
+
+.game-name {
+    position: absolute;
+    font-weight: bolder;
+    letter-spacing: 0.2vw;
+    left: 10px;
+    top: 4px;
+    width: 94%;
+    height: 40%;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    display: block;
+    overflow: visible;
+    z-index: 1;
+    font-size: min(3vw, 4.5vh);
+    text-shadow:
+        calc(min(3vw, 4.5vh) * 0.0172) calc(min(3vw, 4.5vh) * 0.006) 0 rgb(120, 120, 120),
+        calc(min(3vw, 4.5vh) * 0.0344) calc(min(3vw, 4.5vh) * 0.012) 0 rgb(120, 120, 120),
+        calc(min(3vw, 4.5vh) * 0.0516) calc(min(3vw, 4.5vh) * 0.018) 0 rgb(120, 120, 120),
+        calc(min(3vw, 4.5vh) * 0.0688) calc(min(3vw, 4.5vh) * 0.024) 0 rgb(120, 120, 120),
+        calc(min(3vw, 4.5vh) * 0.0860) calc(min(3vw, 4.5vh) * 0.030) 0 rgb(120, 120, 120);
+}
+
+.size-info {
+    position: absolute;
+    bottom: 2px;
+    right: 7px;
+    text-shadow: 0.2vw 0 0 $text-shadow-color;
+    letter-spacing: 0.1vw;
+    overflow: visible;
+    z-index: 1;
+    font-size: min(3vw, 4.5vh);
+    text-shadow:
+        calc(min(3vw, 4.5vh) * 0.0172) calc(min(3vw, 4.5vh) * 0.006) 0 rgb(120, 120, 120),
+        calc(min(3vw, 4.5vh) * 0.0344) calc(min(3vw, 4.5vh) * 0.012) 0 rgb(120, 120, 120),
+        calc(min(3vw, 4.5vh) * 0.0516) calc(min(3vw, 4.5vh) * 0.018) 0 rgb(120, 120, 120),
+        calc(min(3vw, 4.5vh) * 0.0688) calc(min(3vw, 4.5vh) * 0.024) 0 rgb(120, 120, 120),
+        calc(min(3vw, 4.5vh) * 0.0860) calc(min(3vw, 4.5vh) * 0.030) 0 rgb(120, 120, 120);
+}
+
+.thumbnail-separator {
+    position: absolute;
+    height: 100%;
+    width: 2vw;
+    right: -2vw;
+    top: 0;
+}
+
+.pink-card .thumbnail-separator {
+    left: -2vw;
+}
+
+.game-details {
+    position: relative;
+    flex-grow: 3;
+    flex-basis: 0;
+    background-size: contain;
+    box-sizing: border-box;
+    background-color: $blue-sub-color;
+}
+
+.green-card .game-details {
+    background-color: $green-sub-color;
+}
+
+.pink-card .game-details {
+    background-color: $pink-sub-color;
+}
+
+.card-separator {
+    position: absolute;
+    width: 100%;
+    height: $card-body-border-width;
+    background-color: $blue-main-color;
+    top: $card-body-border-width;
+}
+
+.green-card .card-separator {
+    background-color: $green-main-color;
+}
+
+.pink-card .card-separator {
+    background-color: $pink-main-color;
+}
+
+.game-info {
+    height: $big-stripe-size;
+    display: flex;
+    justify-content: space-between;
+    padding: 2vh 2vh;
+    width: 100%;
+}
+
+.game-mode {
+    position: relative;
+    height: 80%;
+    aspect-ratio: 5.3/2;
+    overflow: visible;
+}
+
+.mode-name {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-46%, -52%);
+    text-align: center;
+    z-index: 2;
+    -webkit-text-stroke: 0.4vw #636776;
+    paint-order: stroke fill;
+    overflow: visible;
+    color: rgb(255, 255, 255);
+    font-size: min(2.7vw, 4.5vh);
+}
+
+.mode-main-background {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 40%;
+    width: 100%;
+    background-color: #636776;
+    z-index: 0;
+}
+
+.mode-sub-background {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 73%;
+    width: 85%;
+    background-color: #636776;
+    z-index: 0;
+}
+
+.last-edited {
+    letter-spacing: 0.2;
+    text-shadow: 0.15vw 0 0 $text-shadow-color;
+    width: 60%;
+    overflow: visible;
+    text-align: end;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    font-size: min(1.9vw, 2.6vh);
+    text-shadow:
+        calc(min(1.9vw, 2.6vh) * 0.0172) calc(min(1.9vw, 2.6vh) * 0.006) 0 rgb(120, 120, 120),
+        calc(min(1.9vw, 2.6vh) * 0.0344) calc(min(1.9vw, 2.6vh) * 0.012) 0 rgb(120, 120, 120),
+        calc(min(1.9vw, 2.6vh) * 0.0516) calc(min(1.9vw, 2.6vh) * 0.018) 0 rgb(120, 120, 120),
+        calc(min(1.9vw, 2.6vh) * 0.0688) calc(min(1.9vw, 2.6vh) * 0.024) 0 rgb(120, 120, 120),
+        calc(min(1.9vw, 2.6vh) * 0.0860) calc(min(1.9vw, 2.6vh) * 0.030) 0 rgb(120, 120, 120);
+}
+
+.game-interaction {
+    display: flex;
+    flex-direction: row;
+    gap: min(1vw, 1vh);
+    justify-content: center;
+    align-items: center;
+}
+
+.card-button {
+    width: min(5.5vw, 7vh);
+    aspect-ratio: 18 / 9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.card-button .button-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    user-select: none;
+    overflow: visible;
+}
+
+.card-button:active .button-container,
+.card-single-button:active .button-container {
+    rotate: 180deg;
+}
+
+.card-button:hover .button-container,
+.card-single-button:hover .button-container {
+    filter: brightness(1.15);
+}
+
+.card-button .button-icon {
+    height: 65%;
+    width: auto;
+    z-index: 1;
+    opacity: 0.8;
+    filter: invert(1);
+    pointer-events: none;
+    user-select: none;
+}
+
+.card-single-button {
+    position: absolute;
+    bottom: 10%;
+    display: flex;
+    justify-content: center;
+    height: 40%;
+    width: 50%;
+    cursor: pointer;
+}
+
+.card-single-button .button-container {
+    height: 100%;
+    width: 100%;
+    background-image: url('../../../assets/images/menu/buttons/admin-button/blue-background-highlight.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.green-card .card-single-button .button-container {
+    background-image: url('../../../assets/images/menu/buttons/admin-button/green-background-highlight.png');
+}
+
+.pink-card .card-single-button .button-container {
+    background-image: url('../../../assets/images/menu/buttons/admin-button/red-background-highlight.png');
+}
+
+.card-single-button p {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: min(2.4vw, 3.5vh);
+    text-shadow: 0.23vw 0 0 $text-shadow-color;
+    z-index: 1;
+}
+
+.card-description {
+    font-size: min(1.4vw, 2.1vh);
+    width: 0;
+    height: calc(100% - $corner-square-size * 2);
+    position: absolute;
+    z-index: 2;
+    right: calc($description-width * -1);
+    top: $corner-square-size;
+    opacity: 1;
+    overflow: hidden;
+}
+
+.card-description-body {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: left 0.1s ease-in-out;
+}
+
+.card-description-body img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.card-description p {
+    position: absolute;
+    width: 73%;
+    height: 80%;
+    top: 12%;
+    left: 20%;
+    color: black;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    overflow: hidden;
+    user-select: text;
+}
+
+.card-description * {
+    left: calc($description-width * -1);
+}
+
+.hovered {
+    width: $description-width;
+}
+
+.card-description:not(.hovered) {
+    transition: width 0.1s ease-in-out 0.1s;
+}
+
+.pink-card .card-description {
+    left: calc($description-width * -1);
+
+    .card-description-body {
+        left: $description-width;
+    }
+}
+
+.pink-card .card-description img {
+    transform: scaleX(-1);
+}
+
+.pink-card .card-description p {
+    left: 10%;
+}
+
+.pink-card .hovered .card-description-body {
+    left: 0;
+}
+
+.card-global-container .hovered .card-description-body {
+    left: 0;
+}
+
+button {
+    font-size: 20px;
+    padding: 10px;
+}

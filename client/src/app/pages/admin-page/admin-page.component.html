@@ -1,0 +1,30 @@
+<div id="admin-page-container">
+    <div id="creation-game-popup" (click)="onCreateGame()" [ngStyle]="{ display: isCreationMode ? 'flex' : 'none' }">
+        <div (click)="$event.stopPropagation()">
+            <app-create-game-popup></app-create-game-popup>
+        </div>
+    </div>
+    <div id="admin-page-header">
+        <app-header [onClick]="this.navigateToMenu.bind(this)" [stepNumber]="'1'" [title]="'MODIFIER UN JEU'"></app-header>
+    </div>
+    <div id="admin-page-border">
+        <div id="admin-page-body" [ngStyle]="{ 'overflow-y': isCreationMode ? 'hidden' : 'auto' }">
+            <div id="game-grid">
+                @for(game of games; let i = $index; track game._id) {
+                <app-game-card
+                    [game]="game"
+                    [isAdminView]="true"
+                    [cardColor]="getCardColor(i)"
+                    (edit)="editGame($event)"
+                    (delete)="deleteGame($event, game.name)"
+                    (toggleVisibility)="toggleVisibility($event)"
+                >
+                </app-game-card>
+                }
+            </div>
+        </div>
+    </div>
+    <div id="poke-button">
+        <app-pokeball-button [buttonContent]="'NOUVEAU JEU'" [delay]="100" [onClickAction]="onCreateGame.bind(this)"></app-pokeball-button>
+    </div>
+</div>

@@ -1,0 +1,127 @@
+$height: 7vh;
+$width: 100vw;
+$button-height: calc($height * 0.94);
+$button-width: calc($height * 1.5);
+$padding-left: $button-width + calc($height * 0.05);
+$text-border-right: calc(var(--font-size) * 0.086);
+$text-border-bot: calc(var(--font-size) * 0.03);
+
+$header-center-1: '../../../assets/images/menu/headers/header-center-1.png';
+$header-center-2: '../../../assets/images/menu/headers/header-center-2.png';
+$header-center-3: '../../../assets/images/menu/headers/header-center-3.png';
+$header-left: '../../../assets/images/menu/headers/header-left.png';
+$header-right: '../../../assets/images/menu/headers/header-right.png';
+
+$text-color: #ffffff;
+$text-border-color: hsl(53, 40%, 50%);
+$button-hover-color: rgba(255, 255, 255, 0);
+$text-hover-color: hsl(53, 50%, 70%);
+$button-click-color: rgba(255, 255, 255, 1);
+$text-click-color: hsl(53, 54%, 74%);
+
+header {
+    height: $height;
+    width: $width;
+    display: grid;
+}
+
+div {
+    height: 100%;
+    width: 100%;
+    grid-row: 1;
+    grid-column: 1;
+    display: grid;
+    background-size: auto 100%;
+    background-position: center;
+    user-select: none;
+    line-height: $button-height;
+    text-transform: uppercase;
+    letter-spacing: calc(var(--font-size) * 0.04);
+    color: $text-color;
+    --font-size: min(10vw, calc(7vh * 0.81));
+    --text-shadow-color: hsl(53, 40%, 50%);
+    font-size: var(--font-size);
+    text-shadow:
+        calc(var(--font-size) * 0.0172) calc(var(--font-size) * 0.006) 0 var(--text-shadow-color),
+        calc(var(--font-size) * 0.0344) calc(var(--font-size) * 0.012) 0 var(--text-shadow-color),
+        calc(var(--font-size) * 0.0516) calc(var(--font-size) * 0.018) 0 var(--text-shadow-color),
+        calc(var(--font-size) * 0.0688) calc(var(--font-size) * 0.024) 0 var(--text-shadow-color),
+        calc(var(--font-size) * 0.086) calc(var(--font-size) * 0.03) 0 var(--text-shadow-color);
+}
+
+.header-button {
+    height: $height;
+    width: $button-width;
+    max-width: $width;
+    cursor: pointer;
+    text-align: center;
+}
+
+.button-text {
+    padding-left: calc($height * 0.105);
+}
+
+.header-button:hover .button-underlay {
+    background-color: $button-hover-color;
+    border: calc($height * 0.06) solid $text-color;
+}
+
+.header-button:active .button-text {
+    color: transparent;
+    text-shadow:
+        calc($text-border-right * 0.3) 0 0 $text-click-color,
+        calc($text-border-right * 0.6) 0 0 $text-click-color,
+        calc($text-border-right * 0.9) 0 0 $text-click-color;
+}
+
+.header-button:active .button-underlay {
+    background-color: $button-click-color;
+}
+
+.button-underlay {
+    height: calc($height * 0.78);
+    width: calc($button-width * 0.66);
+    margin-top: calc($button-height * 0.105);
+    margin-left: calc($button-width * 0.19);
+    border-radius: calc($height * 0.15);
+}
+
+.header-center-1 {
+    background-repeat: no-repeat;
+    background-image: url($header-center-1);
+}
+
+.header-center-2 {
+    background-repeat: no-repeat;
+    background-image: url($header-center-2);
+}
+
+.header-center-3 {
+    background-repeat: no-repeat;
+    background-image: url($header-center-3);
+}
+
+.header-right {
+    width: 50%;
+    margin-left: 50%;
+    background-image: url($header-right);
+}
+
+.header-left {
+    width: 50%;
+    background-image: url($header-left);
+    overflow: visible;
+}
+
+.header-text {
+    display: inline;
+}
+
+.title {
+    display: inline-block;
+    height: $height;
+    width: auto;
+    padding-left: $padding-left;
+    padding-right: calc(var(--font-size) * 0.2);
+    background-image: url($header-left);
+}

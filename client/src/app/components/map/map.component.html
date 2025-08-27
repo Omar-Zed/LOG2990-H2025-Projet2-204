@@ -1,0 +1,46 @@
+<div class="map-wrapper" [style.--size]="mapService.visualMapData.size" [class.is-editor]="isEditor">
+    <div class="map-container" (mouseleave)="onHover({ x: -1, y: -1 })">
+        <div class="map">
+            @for (tileRow of mapService.visualMapData.tiles; track tileRow; let x = $index) { @for (tile of tileRow; track tile; let y = $index) {
+            <div
+                (mouseenter)="onHover({ x, y })"
+                (contextmenu)="rightClickTile($event, { x, y })"
+                (click)="clickTile({ x, y })"
+                class="tile"
+                [attr.x]="x"
+                [attr.y]="y"
+                [class]="tile.overlay"
+                [class.has-item]="tile.item"
+                [class.has-player]="tile.player"
+                [attr.tile]="mapService.gameDataService.getTileFromPosition({ x, y })"
+            >
+                @if (tile.underlay) {
+                <div class="tile-image" [style.backgroundImage]="'url(' + tile.underlay + ')'"></div>
+                }
+                <div class="tile-image" [style.backgroundImage]="'url(' + tile.tile + ')'"></div>
+                @if (tile.item) {
+                <app-item
+                    [itemType]="tile.item"
+                    [x]="x"
+                    [y]="y"
+                    [showDescription]="isEditor"
+                    [class.self-spawn-point]="this.matchService.selfPlayer.spawnPoint.x === x && this.matchService.selfPlayer.spawnPoint.y === y"
+                ></app-item>
+                } @if (tile.overlay) {
+                <div class="tile-image tile-overlay"></div>
+                } @if (tile.player) {
+                <div
+                    class="tile-image player"
+                    [class.is-invisible]="this.getTileEffect(tile.player.id) === avatarVisualEffect.Invisible"
+                    [class.is-fade]="this.getTileEffect(tile.player.id) === avatarVisualEffect.Fade"
+                    [class.default]="this.getTileEffect(tile.player.id) === avatarVisualEffect.None"
+                    [style.backgroundImage]="'url(' + tile.player.imageFace + ')'"
+                ></div>
+                }
+                <div class="tile-border"></div>
+            </div>
+            } }
+        </div>
+        <div class="overlay"></div>
+    </div>
+</div>

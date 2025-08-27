@@ -1,0 +1,79 @@
+$gray-border-color: #636776;
+$wheat-border-color: #e9f6f7;
+$stripes-color1: #e6da9b;
+$stripes-color2: #eee7ab;
+$text-shadow-color: rgb(112, 112, 112);
+
+$page-border-width: 10px;
+$padding-wheat-border: 0.7vw;
+$stripes-size: 0.7vw;
+$font-size-header: 6.5vh;
+
+$font-family-title: 'pixel';
+
+$card-width: 26vw;
+
+#create-page-header {
+    height: 7vh;
+}
+
+#admin-page-border {
+    height: calc(100vh - 7vh);
+    border: $page-border-width solid $gray-border-color;
+}
+
+#admin-page-body {
+    position: relative;
+    height: 100%;
+    overflow-y: scroll;
+    background: repeating-linear-gradient(
+        0deg,
+        $stripes-color1,
+        $stripes-color1 $stripes-size,
+        $stripes-color2 $stripes-size,
+        $stripes-color2 $stripes-size * 2
+    );
+    background-size: 100% ($stripes-size * 2);
+    animation: fall 2s linear infinite;
+    box-sizing: border-box;
+
+    border: $page-border-width solid $wheat-border-color;
+    padding: $page-border-width $page-border-width;
+}
+
+@keyframes fall {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 0 $stripes-size * 2;
+    }
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+#game-grid {
+    display: grid;
+    width: 90%;
+    max-width: 120vh;
+    margin: 2vh auto 20vh;
+    grid-template-columns: repeat(3, 1fr);
+    gap: min(3vw, 3vh);
+    place-items: center;
+}
+
+#game-grid * {
+    width: 100%;
+    overflow: visible;
+}
+
+#poke-button {
+    position: absolute;
+    right: 5%;
+    bottom: 7%;
+    width: 20.5vw;
+    height: 4.5vw;
+}

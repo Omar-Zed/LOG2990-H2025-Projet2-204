@@ -1,0 +1,903 @@
+// Adjustable measures
+$main-height: 100vh;
+$main-width: 100vw;
+$main-border-width: 0.005;
+$side-width: 0.5;
+$margin-top: 0.07;
+$margin-top-2: 0.035;
+$margin-bot: 0.04;
+$margin-side: 0.04;
+$margin-left: 0.61;
+$player-arrow-width: 0.044;
+$player-card-width: 0.935;
+$player-card-height: 0.165;
+$player-card-margin: 0.015;
+
+// Adjustable durations
+$arrow-transition-time: 0.25s;
+$movement-bar-transition-time: 0.25s;
+
+// Adjustable colors
+$text-color: rgb(255, 255, 255);
+$main-border-color1: #636776;
+$main-border-color2: #e9f6f7;
+$light-text-color: hsl(220, 1%, 100%);
+$light-text-shadow: hsl(220, 6%, 60%);
+$dark-text-color: hsl(220, 6%, 12%);
+$dark-text-shadow: hsl(220, 6%, 50%);
+
+// Assets
+$card-game-info: '../../../assets/images/menu/containers/cards/game-info.png';
+$card-self-info: '../../../assets/images/menu/containers/cards/self-info.png';
+$card-gray: '../../../assets/images/menu/containers/cards/gray.png';
+$card-orange: '../../../assets/images/menu/containers/cards/orange.png';
+$card-red: '../../../assets/images/menu/containers/cards/red.png';
+$card-red-active: '../../../assets/images/menu/containers/cards/red-active.png';
+$card-blue: '../../../assets/images/menu/containers/cards/blue.png';
+$card-blue-active: '../../../assets/images/menu/containers/cards/blue-active.png';
+$arrow-orange: '../../../assets/images/menu/icons/arrows/orange-arrow.png';
+$arrow-red: '../../../assets/images/menu/icons/arrows/red-arrow.png';
+$arrow-blue: '../../../assets/images/menu/icons/arrows/blue-arrow.png';
+$icon-sword: '../../../assets/images/menu/icons/sword.png';
+$icon-crown: '../../../assets/images/menu/icons/crown.png';
+$icon-defensive-bot: '../../../assets/images/menu/icons/bot-defensive.png';
+$icon-aggressive-bot: '../../../assets/images/menu/icons/bot-aggressive.png';
+$icon-flag: '../../../assets/images/menu/icons/flag.png';
+$timer-image: '../../../assets/images/menu/timer/timer.png';
+$action-button: '../../../assets/images/menu/buttons/play/action-button.png';
+$endturn-button: '../../../assets/images/menu/buttons/play/endturn-button.png';
+$surrender-button: '../../../assets/images/menu/buttons/play/surrender-button.png';
+$surrender-button-hover: '../../../assets/images/menu/buttons/play/surrender-button-hover.png';
+$surrender-button-click: '../../../assets/images/menu/buttons/play/surrender-button-click.png';
+$movement-bar: '../../../assets/images/menu/stat-bar/movement-bar.png';
+$movement-bar-full: '../../../assets/images/menu/stat-bar/movement-bar-full.png';
+$movement-bar-empty: '../../../assets/images/menu/stat-bar/movement-bar-empty.png';
+$movement-icon: '../../../assets/images/menu/icons/movement.png';
+$item-container: '../../../assets/images/menu/containers/item/item-container.png';
+$info-button: '../../../assets/images/menu/icons/info.png';
+
+// Computed measures
+$map-size-1: calc($main-height * (1 - $margin-top - $margin-bot));
+$map-size-2: calc($main-width * (1 - $margin-side) * 1 / (1 + 2 * $side-width));
+$map-size: min($map-size-1, $map-size-2);
+$final-margin-top-1: calc(($main-height - $map-size) * $margin-top / ($margin-top + $margin-bot));
+$final-side-width: calc($map-size * $side-width);
+$margin-side-total: calc(($main-width - $map-size - 2 * $final-side-width));
+$final-margin-left: calc($margin-left * 0.5 * $margin-side-total);
+$final-margin-right: calc((1 - $margin-left) * 0.5 * $margin-side-total);
+$timer-height-1: calc(0.5 * ($final-margin-top-1 - $main-border-width * $map-size * 2));
+$timer-height-2: calc(0.04 * $map-size);
+$timer-height: min($timer-height-1, $timer-height-2);
+$final-margin-top-2: calc($timer-height + ($main-height - $map-size) * $margin-top-2 / ($margin-top-2 + $margin-bot));
+$final-margin-top: min($final-margin-top-1, $final-margin-top-2);
+$final-margin-bot: calc($main-height - $map-size - $final-margin-top);
+$timer-current-ratio: calc(0.51 - var(--current-time) / var(--max-time));
+$timer-half-true: calc(max($timer-current-ratio, -1 * $timer-current-ratio) / $timer-current-ratio * 0.5 + 0.5);
+$timer-half-false: calc(1 - $timer-half-true);
+$total-player-cards-height: calc(($player-card-height * var(--player-count) + $player-card-margin * (var(--player-count) - 1)) * $final-side-width);
+$shadow: drop-shadow(0 0 calc(0.005 * $map-size) rgba(0, 0, 0, 0.15));
+
+.play-page {
+    height: 100vh;
+    width: 100vw;
+    background: #72C37A;
+}
+
+.play-page * {
+    user-select: none;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.play-page .thumbnail-background {
+    position: absolute;
+    height: $main-height;
+    width: $main-width;
+    background-image: var(--bg-url);
+    background-size: cover;
+    filter: blur(calc(0.006 * $map-size)) brightness(0.7) saturate(0.95) contrast(0.95);
+}
+
+main {
+    height: $main-height;
+    width: $main-width;
+    color: $text-color;
+    position: relative;
+}
+
+main::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border: calc($main-border-width * $map-size * 2) solid $main-border-color2;
+    outline: calc(2 * $main-border-width * $map-size) solid $main-border-color1;
+    outline-offset: calc($main-border-width * $map-size * -1);
+}
+
+.main-center {
+    display: inline-block;
+    vertical-align: top;
+    height: $map-size;
+    width: $map-size;
+    margin-top: $final-margin-top;
+    margin-bottom: $final-margin-bot;
+}
+
+app-map {
+    display: block;
+    height: $map-size;
+    width: $map-size;
+}
+
+.main-left,
+.main-right {
+    display: inline-block;
+    vertical-align: top;
+    height: $map-size;
+    width: $final-side-width;
+    margin-top: $final-margin-top;
+    margin-bottom: $final-margin-bot;
+    margin-left: $final-margin-left;
+    margin-right: $final-margin-right;
+    overflow: visible;
+}
+
+.main-right {
+    margin-left: $final-margin-right;
+    margin-right: $final-margin-left;
+}
+
+.player-cards-container {
+    overflow: visible;
+    height: $total-player-cards-height;
+    width: $final-side-width;
+}
+
+.player-arrow-container {
+    display: inline-block;
+    vertical-align: top;
+    width: calc($player-arrow-width * $final-side-width);
+    margin-right: calc((1 - $player-arrow-width - $player-card-width) * $final-side-width);
+    height: $total-player-cards-height;
+    filter: $shadow;
+}
+
+.player-cards {
+    display: inline-block;
+    vertical-align: top;
+    width: calc($player-card-width * $final-side-width);
+    height: $total-player-cards-height;
+    filter: $shadow;
+}
+
+.player-card {
+    height: calc($player-card-height * $final-side-width);
+    width: calc($player-card-width * $final-side-width);
+    margin-bottom: calc($player-card-margin * $final-side-width);
+    background-image: url($card-gray);
+    display: flex;
+    pointer-events: all;
+    cursor: pointer;
+}
+
+.is-red-team.player-card {
+    background-image: url($card-red);
+}
+
+.is-blue-team.player-card {
+    background-image: url($card-blue);
+}
+
+.player-card-left {
+    height: calc($player-card-height * $final-side-width);
+    flex: 1;
+}
+
+*[style*='--current-player-turn: 0'] .player-card:nth-child(1),
+*[style*='--current-player-turn: 1'] .player-card:nth-child(2),
+*[style*='--current-player-turn: 2'] .player-card:nth-child(3),
+*[style*='--current-player-turn: 3'] .player-card:nth-child(4),
+*[style*='--current-player-turn: 4'] .player-card:nth-child(5),
+*[style*='--current-player-turn: 5'] .player-card:nth-child(6) {
+    background-image: url($card-orange);
+}
+
+*[style*='--current-player-turn: 0'] .is-red-team.player-card:nth-child(1),
+*[style*='--current-player-turn: 1'] .is-red-team.player-card:nth-child(2),
+*[style*='--current-player-turn: 2'] .is-red-team.player-card:nth-child(3),
+*[style*='--current-player-turn: 3'] .is-red-team.player-card:nth-child(4),
+*[style*='--current-player-turn: 4'] .is-red-team.player-card:nth-child(5),
+*[style*='--current-player-turn: 5'] .is-red-team.player-card:nth-child(6) {
+    background-image: url($card-red-active);
+}
+
+*[style*='--current-player-turn: 0'] .is-blue-team.player-card:nth-child(1),
+*[style*='--current-player-turn: 1'] .is-blue-team.player-card:nth-child(2),
+*[style*='--current-player-turn: 2'] .is-blue-team.player-card:nth-child(3),
+*[style*='--current-player-turn: 3'] .is-blue-team.player-card:nth-child(4),
+*[style*='--current-player-turn: 4'] .is-blue-team.player-card:nth-child(5),
+*[style*='--current-player-turn: 5'] .is-blue-team.player-card:nth-child(6) {
+    background-image: url($card-blue-active);
+}
+
+.play-page .player-arrow {
+    height: calc($player-card-height * $final-side-width);
+    width: calc($player-arrow-width * $final-side-width);
+    margin-top: calc(var(--current-player-turn) * ($player-card-height + $player-card-margin) * $final-side-width);
+    background-size: 100% 69%;
+    background-image: url($arrow-orange);
+    transition: margin-top $arrow-transition-time ease-in-out;
+}
+
+.play-page .player-arrow.active-blue {
+    background-image: url($arrow-blue);
+}
+
+.play-page .player-arrow.active-red {
+    background-image: url($arrow-red);
+}
+
+.player-cards > .player-card:last-child {
+    margin-bottom: 0;
+}
+
+.player-avatar {
+    display: inline-block;
+    vertical-align: top;
+    height: calc(0.7 * $player-card-height * $final-side-width);
+    width: calc(0.7 * $player-card-height * $final-side-width);
+    margin: calc(0.15 * $player-card-height * $final-side-width);
+    margin-left: calc(0.2 * $player-card-height * $final-side-width);
+    margin-right: calc(0.13 * $player-card-height * $final-side-width);
+}
+
+.player-name {
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    white-space: pre;
+    height: calc(1.3750191307 * 0.6 * $player-card-height * $final-side-width);
+    width: auto;
+    max-width: calc(3.14 * $player-card-height * $final-side-width);
+
+    height: calc(1 * $player-card-height * $final-side-width);
+    line-height: calc(1 * $player-card-height * $final-side-width);
+    font-size: calc(0.55 * $player-card-height * $final-side-width);
+
+    color: $dark-text-color;
+    text-shadow:
+        calc(0.0075 * $player-card-height * $final-side-width) calc(0.002 * $player-card-height * $final-side-width) 0 $dark-text-shadow,
+        calc(0.015 * $player-card-height * $final-side-width) calc(0.004 * $player-card-height * $final-side-width) 0 $dark-text-shadow,
+        calc(0.0225 * $player-card-height * $final-side-width) calc(0.006 * $player-card-height * $final-side-width) 0 $dark-text-shadow,
+        calc(0.03 * $player-card-height * $final-side-width) calc(0.008 * $player-card-height * $final-side-width) 0 $dark-text-shadow;
+}
+
+.is-aggressive-bot:not(.is-admin) .player-name,
+.is-defensive-bot:not(.is-admin) .player-name {
+    max-width: calc(2.7 * $player-card-height * $final-side-width);
+}
+
+.is-admin .player-name {
+    max-width: calc(2.67 * $player-card-height * $final-side-width);
+}
+
+.is-aggressive-bot:not(.is-admin).is-red-team .player-name,
+.is-defensive-bot:not(.is-admin).is-red-team .player-name,
+.is-aggressive-bot:not(.is-admin).is-blue-team .player-name,
+.is-defensive-bot:not(.is-admin).is-blue-team .player-name {
+    max-width: calc(2.64 * $player-card-height * $final-side-width);
+}
+
+.is-admin.is-red-team .player-name,
+.is-admin.is-blue-team .player-name {
+    max-width: calc(2.64 * $player-card-height * $final-side-width);
+}
+
+.has-left {
+    filter: grayscale(1);
+}
+
+.has-left .player-name {
+    overflow: visible;
+    filter: grayscale(1);
+}
+
+.has-left .player-name:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(-0.05 * $player-card-height * $final-side-width);
+    right: calc(-0.03 * $player-card-height * $final-side-width);
+    height: 53%;
+    border-bottom: calc(0.06 * $player-card-height * $final-side-width) solid $dark-text-color;
+}
+
+.player-combats {
+    display: inline-block;
+    vertical-align: top;
+    text-align: right;
+    width: calc(0.75 * $player-card-height * $final-side-width);
+
+    height: calc(1 * $player-card-height * $final-side-width);
+    line-height: calc(1 * $player-card-height * $final-side-width);
+    font-size: calc(0.5 * $player-card-height * $final-side-width);
+
+    color: $dark-text-color;
+    text-shadow:
+        calc(0.45 * 1.6666666 * 0.0075 * $player-card-height * $final-side-width)
+            calc(0.45 * 1.6666666 * 0.002 * $player-card-height * $final-side-width) 0 $dark-text-shadow,
+        calc(0.45 * 1.6666666 * 0.015 * $player-card-height * $final-side-width)
+            calc(0.45 * 1.6666666 * 0.004 * $player-card-height * $final-side-width) 0 $dark-text-shadow,
+        calc(0.45 * 1.6666666 * 0.0225 * $player-card-height * $final-side-width)
+            calc(0.45 * 1.6666666 * 0.006 * $player-card-height * $final-side-width) 0 $dark-text-shadow,
+        calc(0.45 * 1.6666666 * 0.03 * $player-card-height * $final-side-width)
+            calc(0.45 * 1.6666666 * 0.008 * $player-card-height * $final-side-width) 0 $dark-text-shadow;
+}
+
+.is-red-team .player-combats,
+.is-blue-team .player-combats {
+    width: calc(0.37 * $player-card-height * $final-side-width);
+}
+
+.sword-icon {
+    display: inline-block;
+    vertical-align: top;
+    height: calc(0.44 * $player-card-height * $final-side-width);
+    width: calc(0.44 * $player-card-height * $final-side-width);
+    margin-top: calc(0.31 * $player-card-height * $final-side-width);
+    margin-bottom: calc(0.25 * $player-card-height * $final-side-width);
+    background-image: url($icon-sword);
+}
+
+.flag-icon {
+    display: inline-block;
+    vertical-align: top;
+    height: calc(0.44 * $player-card-height * $final-side-width);
+    width: calc(0.44 * $player-card-height * $final-side-width);
+    margin-top: calc(0.31 * $player-card-height * $final-side-width);
+    margin-bottom: calc(0.25 * $player-card-height * $final-side-width);
+    background-image: url($icon-flag);
+    opacity: 0;
+    transition: opacity 0.2s;
+    visibility: hidden;
+}
+
+.has-flag .flag-icon {
+    opacity: 1;
+    visibility: visible;
+}
+
+.player-card-right {
+    text-align: right;
+    height: calc($player-card-height * $final-side-width);
+    width: calc(1.24 * $player-card-height * $final-side-width);
+    margin-right: calc(0.25 * $player-card-height * $final-side-width);
+}
+
+.info-icon {
+    display: none;
+    height: calc(0.37 * $player-card-height * $final-side-width);
+    width: calc(0.37 * $player-card-height * $final-side-width);
+    margin-left: calc(0.09 * $player-card-height * $final-side-width);
+    margin-top: calc(0.36 * $player-card-height * $final-side-width);
+    margin-bottom: calc(0.28 * $player-card-height * $final-side-width);
+}
+
+.is-aggressive-bot:not(.is-admin) .info-icon,
+.is-defensive-bot:not(.is-admin) .info-icon {
+    display: inline-block;
+    vertical-align: top;
+    height: calc(0.4 * $player-card-height * $final-side-width);
+    width: calc(0.4 * $player-card-height * $final-side-width);
+    margin-top: calc(0.32 * $player-card-height * $final-side-width);
+    margin-bottom: calc(0.28 * $player-card-height * $final-side-width);
+    background-image: url($icon-aggressive-bot);
+}
+
+.is-defensive-bot:not(.is-admin) .info-icon {
+    background-image: url($icon-defensive-bot);
+}
+
+.is-admin .info-icon {
+    display: inline-block;
+    vertical-align: top;
+    background-image: url($icon-crown);
+}
+
+.map-info-card {
+    height: calc(0.3 * $map-size);
+    width: $final-side-width;
+    background-image: url($card-game-info);
+    padding: calc(0.018 * $map-size) calc(0.035 * $map-size);
+    filter: $shadow;
+}
+
+.map-info-card > div {
+    width: 100%;
+    height: calc(1.3750191307 * 0.04 * $map-size);
+    line-height: calc(1.3750191307 * 0.04 * $map-size);
+    font-size: calc(0.04 * $map-size);
+
+    color: $dark-text-color;
+    text-shadow:
+        calc(0.0075 * $player-card-height * $final-side-width) calc(0.002 * $player-card-height * $final-side-width) 0 $dark-text-shadow,
+        calc(0.015 * $player-card-height * $final-side-width) calc(0.004 * $player-card-height * $final-side-width) 0 $dark-text-shadow,
+        calc(0.0225 * $player-card-height * $final-side-width) calc(0.006 * $player-card-height * $final-side-width) 0 $dark-text-shadow,
+        calc(0.03 * $player-card-height * $final-side-width) calc(0.008 * $player-card-height * $final-side-width) 0 $dark-text-shadow;
+}
+
+.surrender-button {
+    width: 100%;
+    margin-top: calc(0.013 * $map-size);
+    height: calc(1.2 * 1.3750191307 * 0.045 * $map-size);
+    padding-bottom: calc(0.01 * 1.3750191307 * 0.045 * $map-size);
+
+    line-height: calc(1.3750191307 * 0.045 * $map-size);
+    font-size: calc(0.045 * $map-size);
+
+    text-decoration: none;
+    outline: none;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    color: $dark-text-color;
+    text-shadow:
+        calc(0.0075 * $player-card-height * $final-side-width) calc(0.002 * $player-card-height * $final-side-width) 0 $dark-text-shadow,
+        calc(0.015 * $player-card-height * $final-side-width) calc(0.004 * $player-card-height * $final-side-width) 0 $dark-text-shadow,
+        calc(0.0225 * $player-card-height * $final-side-width) calc(0.006 * $player-card-height * $final-side-width) 0 $dark-text-shadow,
+        calc(0.03 * $player-card-height * $final-side-width) calc(0.008 * $player-card-height * $final-side-width) 0 $dark-text-shadow;
+    background: transparent;
+    font-family: 'pixel';
+    cursor: pointer;
+    background-image: url($surrender-button);
+}
+
+.surrender-button:hover {
+    color: $light-text-color;
+    text-shadow: none;
+    background-image: url($surrender-button-hover);
+}
+
+.surrender-button:active {
+    color: $light-text-color;
+    text-shadow: none;
+    background-image: url($surrender-button-click);
+}
+
+.timer {
+    position: absolute;
+    height: $timer-height;
+    width: 100vw;
+    top: calc($main-border-width * $map-size * 2);
+    left: 0;
+    right: 0;
+    overflow: visible;
+}
+
+.timer-text {
+    position: absolute;
+    height: calc($timer-height * 2.3);
+    width: 100vw;
+    top: calc($timer-height * -0.2);
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: calc($timer-height * 1.9);
+    letter-spacing: calc($timer-height * 0.12);
+    transform: translateX(calc($timer-height * 0.145));
+    text-shadow:
+        calc($timer-height * 0.1) calc($timer-height * 0) #000000,
+        calc($timer-height * -0.1) calc($timer-height * 0) #000000,
+        calc($timer-height * 0) calc($timer-height * 0.1) #000000,
+        calc($timer-height * 0) calc($timer-height * -0.1) #000000,
+        calc($timer-height * 0.1) calc($timer-height * 0.1) #000000,
+        calc($timer-height * -0.1) calc($timer-height * 0.1) #000000,
+        calc($timer-height * 0.1) calc($timer-height * -0.1) #000000,
+        calc($timer-height * -0.1) calc($timer-height * -0.1) #000000,
+        calc($timer-height * 0.22 * $timer-half-false) calc($timer-height * 0 * $timer-half-false) #bf6639,
+        calc($timer-height * -0.2 * $timer-half-false) calc($timer-height * 0 * $timer-half-false) #bf6639,
+        calc($timer-height * 0 * $timer-half-false) calc($timer-height * 0.22 * $timer-half-false) #bf6639,
+        calc($timer-height * 0 * $timer-half-false) calc($timer-height * -0.22 * $timer-half-false) #bf6639,
+        calc($timer-height * 0.11 * $timer-half-false) calc($timer-height * 0.22 * $timer-half-false) #bf6639,
+        calc($timer-height * -0.11 * $timer-half-false) calc($timer-height * 0.22 * $timer-half-false) #bf6639,
+        calc($timer-height * 0.11 * $timer-half-false) calc($timer-height * -0.22 * $timer-half-false) #bf6639,
+        calc($timer-height * -0.11 * $timer-half-false) calc($timer-height * -0.22 * $timer-half-false) #bf6639,
+        calc($timer-height * 0.22 * $timer-half-false) calc($timer-height * 0.11 * $timer-half-false) #bf6639,
+        calc($timer-height * -0.22 * $timer-half-false) calc($timer-height * 0.11 * $timer-half-false) #bf6639,
+        calc($timer-height * 0.22 * $timer-half-false) calc($timer-height * -0.11 * $timer-half-false) #bf6639,
+        calc($timer-height * -0.22 * $timer-half-false) calc($timer-height * -0.11 * $timer-half-false) #bf6639,
+        calc($timer-height * 0.22 * $timer-half-false) calc($timer-height * 0.22 * $timer-half-false) #bf6639,
+        calc($timer-height * -0.22 * $timer-half-false) calc($timer-height * 0.22 * $timer-half-false) #bf6639,
+        calc($timer-height * 0.22 * $timer-half-false) calc($timer-height * -0.22 * $timer-half-false) #bf6639,
+        calc($timer-height * -0.22 * $timer-half-false) calc($timer-height * -0.22 * $timer-half-false) #bf6639,
+        calc($timer-height * 0.22 * $timer-half-true) calc($timer-height * 0 * $timer-half-true) #6f6f6f,
+        calc($timer-height * -0.2 * $timer-half-true) calc($timer-height * 0 * $timer-half-true) #6f6f6f,
+        calc($timer-height * 0 * $timer-half-true) calc($timer-height * 0.22 * $timer-half-true) #6f6f6f,
+        calc($timer-height * 0 * $timer-half-true) calc($timer-height * -0.22 * $timer-half-true) #6f6f6f,
+        calc($timer-height * 0.11 * $timer-half-true) calc($timer-height * 0.22 * $timer-half-true) #6f6f6f,
+        calc($timer-height * -0.11 * $timer-half-true) calc($timer-height * 0.22 * $timer-half-true) #6f6f6f,
+        calc($timer-height * 0.11 * $timer-half-true) calc($timer-height * -0.22 * $timer-half-true) #6f6f6f,
+        calc($timer-height * -0.11 * $timer-half-true) calc($timer-height * -0.22 * $timer-half-true) #6f6f6f,
+        calc($timer-height * 0.22 * $timer-half-true) calc($timer-height * 0.11 * $timer-half-true) #6f6f6f,
+        calc($timer-height * -0.22 * $timer-half-true) calc($timer-height * 0.11 * $timer-half-true) #6f6f6f,
+        calc($timer-height * 0.22 * $timer-half-true) calc($timer-height * -0.11 * $timer-half-true) #6f6f6f,
+        calc($timer-height * -0.22 * $timer-half-true) calc($timer-height * -0.11 * $timer-half-true) #6f6f6f,
+        calc($timer-height * 0.22 * $timer-half-true) calc($timer-height * 0.22 * $timer-half-true) #6f6f6f,
+        calc($timer-height * -0.22 * $timer-half-true) calc($timer-height * 0.22 * $timer-half-true) #6f6f6f,
+        calc($timer-height * 0.22 * $timer-half-true) calc($timer-height * -0.22 * $timer-half-true) #6f6f6f,
+        calc($timer-height * -0.22 * $timer-half-true) calc($timer-height * -0.22 * $timer-half-true) #6f6f6f;
+}
+
+.timer-text::after {
+    z-index: -1;
+    content: '';
+    position: absolute;
+    top: calc($timer-height * 0.5);
+    left: calc((100vw - $timer-height * 0.6) * 0.5 - $timer-height * 0.115);
+    width: calc($timer-height * 0.6);
+    height: calc($timer-height * 1.2);
+    background: linear-gradient(to bottom, #bf6639 calc(100% * $timer-half-false), #6f6f6f calc(100% * $timer-half-false));
+}
+
+.timer-bar {
+    display: flex;
+    height: $timer-height;
+    width: calc(200vw + 2 * $timer-height);
+}
+
+.team-indicator {
+    font-size: calc(0.4 * $player-card-height * $final-side-width);
+    margin-left: calc(0.1 * $player-card-height * $final-side-width);
+    color: $dark-text-color;
+    text-shadow:
+        calc(0.0075 * $player-card-height * $final-side-width) calc(0.002 * $player-card-height * $final-side-width) 0 $dark-text-shadow,
+        calc(0.015 * $player-card-height * $final-side-width) calc(0.004 * $player-card-height * $final-side-width) 0 $dark-text-shadow;
+}
+
+.play-page .timer-image {
+    height: $timer-height;
+    width: calc(200vw + 2 * $timer-height);
+    background-image: url($timer-image);
+    background-size: auto $timer-height;
+    transform: translateX(calc((var(--max-time) - var(--current-time)) / var(--max-time) * -103vw - 1.5vw));
+}
+
+.self-info-card {
+    margin-top: calc(0.02 * $map-size);
+    height: calc(0.465 * $map-size);
+    width: $final-side-width;
+    background-image: url($card-self-info);
+    padding: calc(0.018 * $map-size) calc(0.035 * $map-size);
+    filter: $shadow;
+    color: $dark-text-color;
+    overflow: visible;
+    text-shadow:
+        calc(0.0075 * $player-card-height * $final-side-width) calc(0.002 * $player-card-height * $final-side-width) 0 $dark-text-shadow,
+        calc(0.015 * $player-card-height * $final-side-width) calc(0.004 * $player-card-height * $final-side-width) 0 $dark-text-shadow,
+        calc(0.0225 * $player-card-height * $final-side-width) calc(0.006 * $player-card-height * $final-side-width) 0 $dark-text-shadow,
+        calc(0.03 * $player-card-height * $final-side-width) calc(0.008 * $player-card-height * $final-side-width) 0 $dark-text-shadow;
+}
+
+.self-info-container {
+    width: calc($final-side-width - 0.07 * $map-size);
+    margin-top: calc(0.014 * $map-size);
+    height: calc(0.068 * $map-size);
+    font-size: calc(0.04 * $map-size);
+}
+
+.self-info-avatar {
+    display: inline-block;
+    vertical-align: top;
+    height: calc(0.058 * $map-size);
+    width: calc(0.058 * $map-size);
+    margin-top: calc(0.005 * $map-size);
+    margin-bottom: calc(0.005 * $map-size);
+    margin-right: calc(0.022 * $map-size);
+}
+
+.self-info-name {
+    display: inline-block;
+    vertical-align: top;
+    font-size: calc(0.6 * $player-card-height * $final-side-width);
+    height: calc(0.068 * $map-size);
+    line-height: calc(0.068 * $map-size);
+    padding-bottom: calc(0.05 * 0.04 * $map-size);
+    width: calc(0.26 * $map-size);
+}
+
+.chat-container {
+    width: 100%;
+    height: calc($map-size - $total-player-cards-height - 0.027 * $map-size);
+    position: relative;
+    margin: 0 0 0 2%;
+}
+
+.action-button,
+.endturn-button {
+    display: block;
+    width: 100%;
+    margin-top: calc(0.02 * $map-size);
+    height: calc(1.4 * 1.3750191307 * 0.045 * $map-size);
+    padding-bottom: calc(0.01 * 1.3750191307 * 0.045 * $map-size);
+    border-radius: calc(0.005 * $map-size);
+
+    line-height: calc(1.3750191307 * 0.045 * $map-size);
+    font-size: calc(0.05 * $map-size);
+
+    text-decoration: none;
+    outline: none;
+    outline: none;
+    appearance: none;
+    border: none;
+    -webkit-appearance: none;
+    color: $light-text-color;
+    text-shadow:
+        calc(0.0075 * $player-card-height * $final-side-width) calc(0.002 * $player-card-height * $final-side-width) 0 $light-text-shadow,
+        calc(0.015 * $player-card-height * $final-side-width) calc(0.004 * $player-card-height * $final-side-width) 0 $light-text-shadow,
+        calc(0.0225 * $player-card-height * $final-side-width) calc(0.006 * $player-card-height * $final-side-width) 0 $light-text-shadow,
+        calc(0.03 * $player-card-height * $final-side-width) calc(0.008 * $player-card-height * $final-side-width) 0 $light-text-shadow;
+    font-family: 'pixel';
+    cursor: not-allowed;
+    background-color: transparent;
+    background-image: url($action-button);
+    filter: grayscale(1) brightness(1.08) $shadow;
+}
+
+.endturn-button {
+    background-image: url($endturn-button);
+    margin-top: calc(0.0176 * $map-size);
+}
+
+.action-button.active,
+.endturn-button.active {
+    cursor: pointer;
+    filter: $shadow;
+}
+
+.action-button.active:hover,
+.endturn-button.active:hover {
+    filter: saturate(0.98) brightness(1.08) grayscale(0.03) $shadow;
+}
+
+.action-button.active:active,
+.endturn-button.active:active {
+    filter: saturate(0.96) brightness(1.16) grayscale(0.06) $shadow;
+}
+
+.movement-container {
+    width: calc($final-side-width - 0.07 * $map-size);
+    margin-top: calc(0.0125 * $map-size);
+    height: calc(0.09 * $map-size);
+}
+
+.movement-text {
+    width: calc($final-side-width - 0.07 * $map-size);
+    height: calc(0.045 * $map-size);
+    text-shadow:
+        calc(0.0075 * 0.7 * $player-card-height * $final-side-width) calc(0.002 * 0.7 * $player-card-height * $final-side-width) 0 $light-text-shadow,
+        calc(0.015 * 0.7 * $player-card-height * $final-side-width) calc(0.004 * 0.7 * $player-card-height * $final-side-width) 0 $light-text-shadow,
+        calc(0.0225 * 0.7 * $player-card-height * $final-side-width) calc(0.006 * 0.7 * $player-card-height * $final-side-width) 0 $light-text-shadow,
+        calc(0.03 * 0.7 * $player-card-height * $final-side-width) calc(0.008 * 0.7 * $player-card-height * $final-side-width) 0 $light-text-shadow;
+}
+
+.movement-bar {
+    height: calc(0.04 * $map-size);
+    width: calc($final-side-width - 0.07 * $map-size);
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+
+.movement-bar-top,
+.movement-bar-mid,
+.movement-bar-bot {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    height: calc(0.04 * $map-size);
+    width: calc($final-side-width - 0.07 * $map-size);
+}
+
+.movement-bar-top {
+    background-image: url($movement-bar);
+}
+
+.movement-bar-mid {
+    margin: calc(0.04 * $map-size * 0.22222222222) calc(($final-side-width - 0.07 * $map-size) * 0.0206185567);
+    width: calc(var(--cur-move) / var(--max-move) * ($final-side-width - 0.07 * $map-size) * 0.95876288659);
+    height: calc(0.04 * $map-size * 0.55555555555);
+    background-image: url($movement-bar-full);
+    transition: width $movement-bar-transition-time ease-in-out;
+}
+
+.movement-bar-bot {
+    margin: calc(0.04 * $map-size * 0.22222222222) calc(($final-side-width - 0.07 * $map-size) * 0.0206185567);
+    width: calc(($final-side-width - 0.07 * $map-size) * 0.95876288659);
+    height: calc(0.04 * $map-size * 0.55555555555);
+    background-image: url($movement-bar-empty);
+}
+
+.movement-text-left {
+    display: inline-block;
+    vertical-align: top;
+    width: 70%;
+    height: calc(0.045 * $map-size);
+    line-height: calc(0.045 * $map-size);
+    font-size: calc(0.033 * $map-size);
+    padding-left: calc(0.005 * $map-size);
+}
+
+.movement-text-right {
+    display: inline-block;
+    vertical-align: top;
+    width: 30%;
+    height: calc(0.045 * $map-size);
+    line-height: calc(0.045 * $map-size);
+    font-size: calc(0.033 * $map-size);
+    padding-right: calc(0.005 * $map-size);
+    text-align: right;
+}
+
+.play-page .movement-icon {
+    display: inline-block;
+    vertical-align: top;
+    height: calc(0.045 * $map-size);
+    width: calc(0.045 * $map-size);
+    background-size: contain;
+    background-image: url($movement-icon);
+}
+
+.items-container {
+    width: calc($final-side-width - 0.07 * $map-size);
+    height: calc(0.195 * $map-size);
+    margin-top: calc(0.032 * $map-size);
+    overflow: visible;
+}
+
+.play-page .item-slot {
+    overflow: visible;
+    display: inline-block;
+    vertical-align: top;
+    width: calc(0.195 * $map-size);
+    height: calc(0.195 * $map-size);
+    background-size: contain;
+}
+
+.item-slot:nth-child(2) {
+    margin-left: calc($final-side-width - 0.07 * $map-size - 2 * 0.195 * $map-size);
+}
+
+.item-slot {
+    display: inline-block;
+    vertical-align: top;
+    width: calc(0.195 * $map-size);
+    height: calc(0.195 * $map-size);
+    background: url($item-container);
+}
+
+.item-icon {
+    overflow: visible;
+    width: calc(0.195 * $map-size);
+    height: calc(0.195 * $map-size);
+}
+
+#player-avatar {
+    width: 35.484px;
+    height: 35.484px;
+    margin: 0 auto;
+}
+
+.debug-text {
+    margin-left: calc($map-size * 0.03);
+    color: #e00004;
+}
+
+.info-button {
+    cursor: pointer;
+    float: right;
+    margin-top: calc(0.004 * $map-size);
+    height: calc(0.060 * $map-size);
+    width: calc(0.060 * $map-size);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url($info-button);
+    background-color: transparent;
+    text-decoration: none;
+    outline: none;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+}
+
+.info-button:hover {
+    filter: saturate(0.96) brightness(1.16) grayscale(0.06);
+}
+
+.info-button:active {
+    filter: saturate(0.92) brightness(1.32) grayscale(0.12);
+}
+
+
+#tool-description {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+    max-width: calc($map-size * 0.39);
+    width: auto;
+    height: auto;
+    background: url('../../../assets/images/menu/containers/description-container.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    transform: translateY(-40%);
+    pointer-events: none;
+    user-select: none;
+}
+
+.item-description {
+    max-width: calc($map-size * 0.39);
+    width: auto;
+    height: auto;
+    font-size: calc($map-size * 0.029);
+    line-height: calc($map-size * 0.036);
+    padding: calc($map-size * 0.03);
+    padding-left: calc($map-size * 0.04);
+    color: black;
+    text-transform: none;
+    white-space: normal;
+}
+
+.item-description br {
+    text-align: center;
+}
+
+#player-info-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+        opacity 0.3s ease-in-out,
+        background-color 0.3s ease-in-out;
+
+    &.visible {
+        visibility: visible;
+        opacity: 1;
+        background-color: rgba(0, 0, 0, 0.5);
+        pointer-events: auto;
+        animation: popupIn 0.2s steps(8, end) forwards;
+    }
+}
+
+@keyframes popupIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.04);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+

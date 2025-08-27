@@ -1,0 +1,119 @@
+$gray-border-color: #636776;
+$wheat-border-color: #e9f6f7;
+$stripes-color1: #9be6d2;
+$stripes-color2: #abeeda;
+
+$page-border-width: 10px;
+$padding-wheat-border: 0.7vw;
+$stripes-size: 0.7vw;
+
+$card-width: 26vw;
+
+#admin-page-header {
+    height: 7vh;
+}
+
+#admin-page-border {
+    height: calc(100vh - 7vh);
+    border: $page-border-width solid $gray-border-color;
+}
+
+#admin-page-body {
+    position: relative;
+    height: 100%;
+    overflow-y: auto;
+    background: repeating-linear-gradient(
+        0deg,
+        $stripes-color1,
+        $stripes-color1 $stripes-size,
+        $stripes-color2 $stripes-size,
+        $stripes-color2 $stripes-size * 2
+    );
+    background-size: 100% ($stripes-size * 2);
+    animation: fall 2s linear infinite;
+    box-sizing: border-box;
+
+    border: $page-border-width solid $wheat-border-color;
+    padding: $page-border-width $page-border-width;
+}
+
+@keyframes fall {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 0 $stripes-size * 2;
+    }
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+#game-grid {
+    display: grid;
+    width: 90%;
+    max-width: 120vh;
+    margin: 2vh auto 20vh;
+    grid-template-columns: repeat(3, 1fr);
+    gap: min(3vw, 3vh);
+    place-items: center;
+}
+
+#game-grid * {
+    width: 100%;
+    overflow: visible;
+}
+
+#poke-button {
+    z-index: 0;
+    position: absolute;
+    right: 5%;
+    bottom: 7%;
+    height: min(4.5vw, 6.5vh);
+    aspect-ratio: 17/3;
+    overflow: visible;
+}
+
+#creation-game-popup {
+    position: absolute;
+    display: flex;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    background-color: rgba($color: #000000, $alpha: 0.5);
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+
+    opacity: 0;
+    transform: scale(0.95);
+
+    animation: popupIn 0.2s steps(8, end) forwards;
+}
+
+#creation-game-popup * {
+    overflow: visible;
+}
+
+@keyframes popupIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.04);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+app-warning-confirmation-popup {
+    flex-shrink: 0;
+}

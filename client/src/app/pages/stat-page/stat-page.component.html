@@ -1,0 +1,98 @@
+<div id="stat-page-container">
+    <div id="stat-page-header">
+        <app-header [onClick]="this.navigateToMenu.bind(this)" [stepNumber]="'1'" [title]="'FIN DE PARTIE'"></app-header>
+    </div>
+    <div id="stat-page-border">
+        <div id="stat-page-body">
+            <div id="top-stats-container">
+                <div id="player-stats-container">
+                    <img class="container-border" src="./assets/images/menu/containers/combat-container/combat-container-left-border.png" />
+                    <div class="container-body">
+                        <div class="stat-column">
+                            <div class="stat-title"></div>
+                            <div class="stat-container">
+                                @for(player of playerStatList(); track player.id){
+                                <div class="stat-value" [class]="player.team" [class.self]="isSelfPlayer(player.id)">{{ player.name }}</div>
+                                }
+                            </div>
+                        </div>
+                        <div class="stat-separator"></div>
+
+                        @for(statType of playerStatTypes; track statType){
+                        <div class="stat-column">
+                            <div class="stat-title" (click)="updateSorting(statType)">
+                                {{ statType }}
+                                <div
+                                    class="sort-icon"
+                                    [class.ascending]="this.sortingStat() === statType && this.sortingOrder() === 'ascending'"
+                                    [class.descending]="this.sortingStat() === statType && this.sortingOrder() === 'descending'"
+                                ></div>
+                            </div>
+                            <div class="stat-container">
+                                @for(player of playerStatList() ; track player.id){
+                                <div class="stat-value" [class.self]="isSelfPlayer(player.id)">{{ player[statType] }}</div>
+                                }
+                            </div>
+                        </div>
+                        <div class="stat-separator"></div>
+                        }
+                    </div>
+                    <img class="container-border" src="./assets/images/menu/containers/combat-container/combat-container-rigth-border.png" />
+                </div>
+            </div>
+            <div id="bottom-stats-container">
+                <div id="chat-container">
+                    <app-chat></app-chat>
+                </div>
+                <div id="match-stats-container">
+                    <img class="container-border" src="./assets/images/menu/containers/combat-container/combat-container-left-border.png" />
+                    <div class="container-body">
+                        <div class="main-stats-container">
+                            <div class="match-stat">
+                                <span class="stat-label">DURÉE :</span>
+                                <span class="stat-value">
+                                    {{ statService.globalStats.gameDuration | date: 'mm:ss' }}
+                                </span>
+                            </div>
+
+                            <div class="match-stat">
+                                <span class="stat-label">TOURS :</span>
+                                <span class="stat-value"> {{ statService.globalStats.rounds }} </span>
+                            </div>
+
+                            <div class="match-stat">
+                                <span class="stat-label">TUILES VISITÉES :</span>
+                                <span class="stat-value"> {{ statService.globalStats.visitedTilesRatio }} % </span>
+                            </div>
+
+                            <div class="match-stat">
+                                <span class="stat-label">PORTES MANIPULÉES :</span>
+                                <span class="stat-value"> {{ statService.globalStats.toggledBridgesRatio }} % </span>
+                            </div>
+
+                            @if(isModeCTF()){
+                            <div class="match-stat">
+                                <span class="stat-label">PORTEURS DE DRAPEAU :</span>
+                                <span class="stat-value"> {{ statService.globalStats.flagHoldersCount }}</span>
+                            </div>
+                            }
+                        </div>
+
+                        <div class="match-winner-container">
+                            <div class="winner-title">{{ statService.winnerData.name.toUpperCase() }}</div>
+                            <img class="winner-battle-platform" src="{{ statService.winnerData.tileImage }}" />
+                            <img
+                                class="winner-avatar"
+                                src="{{ statService.winnerData.avatarImage }}"
+                                [class.evolved]="statService.winnerData.avatarImage.toString().includes('evolved')"
+                            />
+                        </div>
+
+                        <div id="quit-button" (click)="navigateToMenu()">< QUITTER</div>
+                    </div>
+                    <img class="container-border" src="./assets/images/menu/containers/combat-container/combat-container-rigth-border.png" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

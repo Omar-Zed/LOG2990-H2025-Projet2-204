@@ -1,0 +1,86 @@
+$background-color: rgb(31, 32, 35);
+$default-font: 'pixel';
+
+@font-face {
+    font-family: 'pixel';
+    src: url('./assets/fonts/pixel.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'pixel-monospace';
+    src: url('./assets/fonts/pixel-monospace.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'pokemon-narrow';
+    src: url('./assets/fonts/pokemon-narrow.woff2') format('woff2');
+}
+
+:root {
+    color-scheme: dark;
+}
+
+* {
+    margin: 0;
+    margin-block: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-inline: 0;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+    padding: 0;
+    padding-block: 0;
+    padding-block-start: 0;
+    padding-block-end: 0;
+    padding-inline: 0;
+    padding-inline-start: 0;
+    padding-inline-end: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    box-sizing: border-box;
+
+    image-rendering: optimizeSpeed;
+    image-rendering: -o-crisp-edges;
+    image-rendering: optimize-contrast;
+    -ms-interpolation-mode: nearest-neighbor;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: grayscale;
+    image-rendering: pixelated;
+}
+
+html,
+body {
+    height: 100vh;
+    width: 100vw;
+    background: $background-color;
+    font-family: $default-font;
+}
+
+.cdk-overlay-container {
+    background-color: rgba(0, 0, 0, 0.5);
+    left: 0;
+    top: 0;
+    padding: 6vw;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    overflow-y: auto;
+    gap: 1vw;
+    pointer-events: none;
+    scrollbar-width: none;
+}
+
+.cdk-global-overlay-wrapper {
+    flex-shrink: 0;
+}
+
+app-warning-confirmation-popup {
+    pointer-events: auto;
+}

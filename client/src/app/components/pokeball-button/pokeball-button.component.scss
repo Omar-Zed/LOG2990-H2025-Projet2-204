@@ -1,0 +1,132 @@
+$scale: min(40vw, 60vh);
+
+.pokeball-button {
+    display: inline-flex;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: visible;
+}
+
+.pokeball-button:hover {
+    filter: brightness(1.1);
+    cursor: pointer;
+}
+
+.pokeball-active-button-icon,
+.pokeball-button-icon {
+    position: absolute;
+    z-index: 1;
+    height: 190%;
+    flex: 1;
+    top: 50%;
+    left: -10%;
+    transform: translateY(-50%);
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
+}
+
+.pokeball-active-button-icon {
+    opacity: 0;
+}
+
+.active-pokeball-button .pokeball-button-icon {
+    opacity: 0;
+}
+
+.active-pokeball-button .pokeball-active-button-icon {
+    opacity: 1;
+}
+
+.pokeball-button-spacer {
+    width: 13%;
+    height: 100%;
+    background-image: url('../../../assets/images/menu/buttons/poke-button/button-container-borderless.png');
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    background-position: center;
+}
+
+.active-pokeball-button .pokeball-button-spacer {
+    background-image: url('../../../assets/images/menu/buttons/poke-button/button-container-borderless-active.png');
+}
+
+.pokeball-button-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    flex: 1;
+    margin-left: -2%;
+    margin-right: -2%;
+    background-image: url('../../../assets/images/menu/buttons/poke-button/button-container-borderless.png');
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    background-position: center;
+}
+
+.active-pokeball-button .pokeball-button-content {
+    background-image: url('../../../assets/images/menu/buttons/poke-button/button-container-borderless-active.png');
+}
+
+.pokeball-button-content p {
+    font-size: clamp(1rem, 5vmin, 6vh);
+    width: 100%;
+    text-align: center;
+    user-select: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.pokeball-button-end {
+    background-image: url('../../../assets/images/menu/buttons/poke-button/button-border.png');
+    background-size: 100% 100%;
+    background-position: center;
+    position: relative;
+    height: 100%;
+    aspect-ratio: 10/32;
+    object-fit: fill;
+    pointer-events: none;
+    user-select: none;
+}
+
+.active-pokeball-button .pokeball-button-end {
+    background-image: url('../../../assets/images/menu/buttons/poke-button/button-border-active.png');
+}
+
+.pokeball-button-start {
+    height: 100%;
+    display: inline-flex;
+}
+
+.pokeball-border-start {
+    background-image: url('../../../assets/images/menu/buttons/poke-button/button-border.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-origin: border-box;
+    transform: scaleX(-1);
+    position: relative;
+    height: 100%;
+    width: auto;
+    aspect-ratio: 10/32;
+    object-fit: fill;
+    pointer-events: none;
+    user-select: none;
+    right: -1px;
+}
+
+.active-pokeball-button .pokeball-border-start {
+    background-image: url('../../../assets/images/menu/buttons/poke-button/button-border-active.png');
+}

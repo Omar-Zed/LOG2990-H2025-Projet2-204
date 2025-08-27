@@ -1,0 +1,162 @@
+$map-padding-x: 0.86%;
+$map-padding-y: 1.38%;
+$overlay: '../../../assets/images/menu/map/overlay.png';
+
+$border-width: 0.01px;
+$border-color: rgba(255, 255, 255, 0.11);
+$hover-border-color: rgba(255, 255, 255, 0.35);
+$hover-overlay-color: rgba(255, 255, 255, 0.095);
+
+.map-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.map-wrapper * {
+    user-select: none;
+}
+
+.map-container {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
+    display: grid;
+    overflow: visible;
+}
+
+.map {
+    overflow: visible;
+    grid-row: 1;
+    grid-column: 1;
+    margin: $map-padding-y $map-padding-x;
+    height: calc(100% - $map-padding-y - $map-padding-y);
+    width: calc(100% - $map-padding-x - $map-padding-x);
+    display: grid;
+    grid-template-columns: repeat(var(--size), 1fr);
+    grid-template-rows: repeat(var(--size), 1fr);
+}
+
+.overlay {
+    pointer-events: none;
+    grid-row: 1;
+    grid-column: 1;
+    background-image: url($overlay);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.tile {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    overflow: visible;
+}
+
+.tile[tile='Grass'] {
+    background-color: #72c37a;
+}
+
+.tile[tile='Path'] {
+    background-color: #f1d599;
+}
+
+.tile[tile='Water'] {
+    background-color: #6ab7d7;
+}
+
+.tile[tile='Bush'] {
+    background-color: #108239;
+}
+
+.tile[tile='BrokenBridge'],
+.tile[tile='Bridge'] {
+    background-color: #ba8348;
+}
+
+app-item,
+.tile-image {
+    pointer-events: none;
+    grid-row: 1;
+    grid-column: 1;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.self-spawn-point {
+    filter: hue-rotate(210deg) brightness(1.2);
+}
+
+.tile-border {
+    pointer-events: none;
+    grid-row: 1;
+    grid-column: 1;
+    width: 100%;
+    height: 100%;
+    border: $border-width solid $border-color;
+}
+
+.is-editor .tile:hover .tile-border {
+    border-color: $hover-border-color;
+    background-color: $hover-overlay-color;
+}
+
+.is-editor .tile:has(.item) {
+    cursor: grab;
+}
+
+::ng-deep .is-editor .grab .tile:has(.item) {
+    cursor: grabbing;
+}
+
+.player {
+    z-index: 2;
+    background-size: contain;
+}
+
+.player-overlay .tile-overlay,
+.possible-move-overlay .tile-overlay {
+    background-color: rgba(232, 253, 255, 0.28);
+}
+
+.hover-move-overlay .tile-overlay {
+    background-color: rgba(104, 165, 255, 0.45);
+}
+
+:not(.is-editor) .has-item,
+:not(.is-editor) .has-player {
+    cursor: pointer;
+}
+
+.action-overlay,
+.possible-move-overlay,
+.hover-move-overlay {
+    cursor: pointer;
+}
+
+.possible-move-overlay:hover .tile-overlay {
+    background-color: rgba(104, 165, 255, 0.45);
+}
+
+.action-overlay .tile-overlay {
+    background-color: rgba(255, 104, 104, 0.56);
+}
+
+.is-invisible {
+    opacity: 0;
+}
+
+.is-fade {
+    opacity: 0.2;
+}
+
+app-item {
+    overflow: visible;
+}

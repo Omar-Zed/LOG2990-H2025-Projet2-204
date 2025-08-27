@@ -1,0 +1,41 @@
+<div
+    class="player-component"
+    [ngClass]="{
+        'is-bot': player.playerType !== 'player',
+        'is-self-player-card': player.isSelf,
+        'is-disconnected': !player.isConnected,
+        'display-ban-button': displayKickButton,
+        'is-host': player.isHost
+    }"
+>
+    <div class="avatar-container" (click)="displayKickButton && !player.isConnected ? onAddBot() : null">
+        @if(player.isConnected) {
+        <img src="{{ player.avatarImage }}" class="avatar" />
+        }
+    </div>
+    <div class="player-card" (click)="displayKickButton && !player.isConnected ? onAddBot() : null">
+        <div class="add-instruction">+ Ajouter</div>
+        <span class="player-name">
+            {{ player.name }}
+            @if (player.playerType === 'botAggressive') {
+            <span class="bot-icon-aggresive"></span>
+            <span class="bot-type aggresive">Agressif</span>
+
+            } @if (player.playerType === 'botDefensive') {
+            <span class="bot-icon-defensive"></span>
+            <span class="bot-type">Défensif</span>
+
+            }
+            <div class="crown"></div>
+        </span>
+        <div class="hp-bar">
+            <div class="hp-backround">
+                <div class="hp-progress"></div>
+            </div>
+            <div class="hp-value">{{ player.health }} / {{ player.health }}</div>
+        </div>
+    </div>
+    <div class="ban-button">
+        <div class="ban-icon" (click)="onClick()"></div>
+    </div>
+</div>

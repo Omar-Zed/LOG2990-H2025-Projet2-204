@@ -1,0 +1,67 @@
+<div id="lobby-container">
+    <div id="lobby-header">
+        <app-header [onClick]="this.leaveLobbyButton.bind(this)" [stepNumber]="'3'" [title]="'Page d\'attente'"></app-header>
+    </div>
+
+    <div id="lobby-border">
+        <div id="lobby-body">
+            <div class="access-code-container">
+                <p class="access-title">Votre code d'accès</p>
+                <p class="access-code">{{ matchService.data.code }}</p>
+                @if (visualData.isSelfHost) {
+                <div class="access-instruction">
+                    <div class="lock-container" (click)="this.toggleLockRoom()">
+                        @if (this.matchService.data.lobbyData.isLocked) {
+                        <div class="lock-icon"></div>
+                        } @else {
+                        <div class="unlock-icon"></div>
+                        }
+                    </div>
+                    <div class="copy-container" (click)="this.copyMatchCode()">
+                        <img src="./assets/images/menu/icons/copy.png" />
+                    </div>
+                </div>
+                } @else{
+                <div class="access-instruction">
+                    <div class="empty-lock-container">
+                        @if (this.matchService.data.lobbyData.isLocked) {
+                        <div class="lock-icon"></div>
+                        } @else {
+                        <div class="unlock-icon"></div>
+                        }
+                    </div>
+                    <div class="copy-container" (click)="this.copyMatchCode()">
+                        <img src="./assets/images/menu/icons/copy.png" />
+                    </div>
+                </div>
+                }
+            </div>
+
+            <div id="players-list">
+                @for (player of visualData.players; track $index) {
+                <div class="player-card-container">
+                    <app-player-card
+                        [player]="player"
+                        [displayKickButton]="visualData.isSelfHost"
+                        [onClick]="kickPlayer.bind(this, player.id)"
+                        (addBot)="this.showBotCreationPopup()"
+                    ></app-player-card>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="chat-container">
+        <app-chat></app-chat>
+    </div>
+    @if (visualData.isSelfHost) {
+    <div id="poke-button">
+        <app-pokeball-button [buttonContent]="'LANCER'" [onClickAction]="this.startMatchButton.bind(this)"></app-pokeball-button>
+    </div>
+    }
+    <div id="creation-bot-popup" [class.visible]="showBotPopup" (click)="this.showBotPopup = false">
+        <div class="popup-content" (click)="$event.stopPropagation()">
+            <app-create-bot-popup (botTypeSelected)="handleBotTypeSelected($event)"></app-create-bot-popup>
+        </div>
+    </div>
+</div>

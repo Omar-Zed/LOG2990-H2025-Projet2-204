@@ -1,0 +1,24 @@
+<div id="join-page-container">
+    <div id="join-page-header">
+        <app-header [onClick]="this.navigateToMenu.bind(this)" [stepNumber]="'1'" [title]="'REJOINDRE UNE PARTIE'"></app-header>
+    </div>
+    <div id="join-page-border">
+        <div id="join-page-body">
+            <div id="main-container">
+                <input id="input" [(ngModel)]="matchCode" maxlength="{{codeLength}}" autofocus (keyup)="joinMatch($event)" (click)="this.audioService.playEffect(this.clickValue)"/>
+                <div id="main-container-body">
+                    <p id="main-message">Entrez votre code d'accès</p>
+
+                    <div id="visual-input-container">
+                        <div class="number">{{ this.matchCode[0] }}</div>
+                        <div class="number">{{ this.matchCode[1] }}</div>
+                        <div class="number">{{ this.matchCode[2] }}</div>
+                        <div class="number">{{ this.matchCode[3] }}</div>
+                    </div>
+
+                    <p id="main-message">Appuyer sur Entrer pour valider</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

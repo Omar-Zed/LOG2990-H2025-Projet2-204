@@ -1,0 +1,298 @@
+$player-list-height: calc((100vh - 6vw) * 0.9);
+$player-list-width: 52vw;
+$player-card-height-1: calc($player-list-height * 0.166666);
+$player-card-height-2: calc($player-list-width * 0.143333);
+$player-card-height: min($player-card-height-1, $player-card-height-2);
+$scale: calc($player-card-height * 0.15);
+$corner-square-size: calc(0.3 * $scale);
+$clip-path: polygon(
+    $corner-square-size 0%,
+    calc(100% - #{$corner-square-size}) 0%,
+
+    calc(100% - #{$corner-square-size}) $corner-square-size,
+    100% $corner-square-size,
+
+    100% calc(100% - #{$corner-square-size}),
+    calc(100% - #{$corner-square-size}) calc(100% - #{$corner-square-size}),
+    calc(100% - #{$corner-square-size}) 100%,
+    $corner-square-size 100%,
+
+    $corner-square-size calc(100% - #{$corner-square-size}),
+    0% calc(100% - #{$corner-square-size}),
+    0% $corner-square-size,
+    $corner-square-size $corner-square-size
+);
+
+$inner-border-width: calc(0.3 * $scale);
+
+$text-shadow-color: rgb(112, 112, 112);
+
+.player-component {
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 5% 95% 0%;
+    overflow: visible;
+    transform: translate(0%);
+}
+
+.ban-button {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.display-ban-button {
+    grid-template-columns: 5% 87% 8%;
+}
+
+.ban-icon {
+    height: 100%;
+    width: 80%;
+    background-image: url('../../../assets/images/menu/icons/kick.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+.ban-icon:hover {
+    filter: brightness(1.2);
+}
+
+.ban-icon:active {
+    rotate: 180deg;
+}
+
+.is-host .ban-icon {
+    user-select: none;
+    cursor: not-allowed;
+}
+
+.is-host .ban-icon:hover {
+    filter: brightness(1);
+}
+
+.is-host .ban-icon:active {
+    rotate: 0deg;
+}
+
+.player-card {
+    position: relative;
+    height: 100%;
+    width: 100%;
+
+    border: calc($corner-square-size * 2) solid #48485f;
+    clip-path: $clip-path;
+
+    background-image: url('../../../assets/images/menu/containers/dark-blue/dark-blue-scrare-body.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: visible;
+
+    padding: $inner-border-width;
+    box-shadow:
+        inset $inner-border-width 0 0 0 #80c0d8,
+        inset calc(-1 * $inner-border-width) 0 0 0 #2878b0,
+        inset 0 $inner-border-width 0 0 #80c0d8,
+        inset 0 calc(-1 * $inner-border-width) 0 0 #2878b0;
+}
+
+.is-self-player-card .player-card {
+    border: calc($corner-square-size * 2) solid #f87030;
+    clip-path: $clip-path;
+
+    background-image: url('../../../assets/images/menu/containers/pink/pink-scrare-body.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: visible;
+
+    padding: $inner-border-width;
+    box-shadow:
+        inset $inner-border-width 0 0 0 rgb(247, 209, 216),
+        inset calc(-1 * $inner-border-width) 0 0 0 rgb(231, 163, 131),
+        inset 0 $inner-border-width 0 0 rgb(247, 209, 216),
+        inset 0 calc(-1 * $inner-border-width) 0 0 rgb(231, 163, 131);
+}
+
+.is-bot .player-card {
+    background-image: url('../../../assets/images/menu/containers/gray/gray-scrare-body.png');
+    box-shadow:
+        inset $inner-border-width 0 0 0 hsl(196, 0%, 67%),
+        inset calc(-1 * $inner-border-width) 0 0 0 hsl(205, 0%, 42%),
+        inset 0 $inner-border-width 0 0 hsl(196, 0%, 67%),
+        inset 0 calc(-1 * $inner-border-width) 0 0 hsl(205, 0%, 42%);
+}
+
+.avatar-container {
+    height: 100%;
+    aspect-ratio: 1/1;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+
+    background-image: url('../../../assets/images/menu/containers/dark-blue/party-ball.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: visible;
+    position: relative;
+}
+
+.avatar-container .avatar {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 100%;
+    user-select: none;
+    pointer-events: none;
+}
+
+.player-card .player-name {
+    position: absolute;
+    top: 7%;
+    left: 11%;
+    font-size: calc(2 * $scale);
+    text-shadow: calc(0.19 * $scale) 0 0 $text-shadow-color;
+    display: flex;
+    justify-content: start;
+    gap: calc(0.4 * $scale);
+    width: 45%;
+    z-index: 3;
+    user-select: none;
+
+    flex-wrap: wrap;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.player-card .crown {
+    height: calc(2 * $scale);
+    margin: auto calc(0.2 * $scale);
+    aspect-ratio: 1/1;
+    background-image: url('../../../assets/images/menu/icons/crown.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+}
+
+.player-card .bot-icon-aggresive,
+.player-card .bot-icon-defensive {
+    height: calc(2 * $scale);
+    margin: auto 0;
+    aspect-ratio: 1/1;
+    background-image: url('../../../assets/images/menu/icons/bot-aggressive.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.player-card .bot-icon-defensive {
+    background-image: url('../../../assets/images/menu/icons/bot-defensive.png');
+}
+.is-host .player-card .crown {
+    opacity: 1;
+}
+
+.player-card .hp-bar {
+    position: absolute;
+    bottom: 52%;
+    right: 4%;
+    width: 38%;
+    aspect-ratio: 20/1.4;
+    background-image: url('../../../assets/images/menu/stat-bar/hp-bar.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: end;
+    overflow: visible;
+}
+
+.player-card .hp-bar .hp-backround {
+    background-color: #727272;
+    width: 77%;
+    height: 100%;
+    margin: 2%;
+    z-index: -1;
+    display: flex;
+    justify-content: start;
+}
+
+.player-card .hp-bar .hp-backround .hp-progress {
+    height: 100%;
+    width: 100%;
+    background-color: #50d16c;
+}
+
+.hp-value {
+    position: absolute;
+    right: 0;
+    bottom: -130%;
+    font-size: calc(2 * $scale);
+    text-shadow: calc(0.25 * $scale) 0 0 $text-shadow-color;
+    user-select: none;
+}
+
+.is-disconnected {
+    transform: translateX(78.5%);
+    filter: brightness(0.4);
+    transition:
+        transform 0.18s ease,
+        filter 0.18s ease;
+}
+
+.display-ban-button.is-disconnected:hover {
+    transform: translateX(50%);
+    filter: brightness(0.6);
+    cursor: pointer;
+}
+
+.display-ban-button.is-disconnected:active {
+    transform: translateX(50%);
+    filter: brightness(0.8);
+    transition:
+        transform 0.11s ease,
+        filter 0.11s ease;
+}
+
+.is-disconnected .avatar,
+.is-disconnected .player-card *,
+.player-card .add-instruction,
+.is-disconnected .ban-button {
+    display: none;
+}
+
+.display-ban-button.is-disconnected .player-card .add-instruction {
+    position: absolute;
+    top: 50%;
+    left: 11%;
+    transform: translateY(-50%);
+    text-align: left;
+    font-size: calc(3.5 * $scale);
+    text-shadow: calc(0.4 * $scale) 0 0 $text-shadow-color;
+    color: #ffffff;
+    user-select: none;
+    display: block;
+    word-spacing: calc(-0.015 * $scale);
+}
+
+.player-card .bot-type {
+    font-size: calc(1.5 * $scale);
+    color: #69c5fb;
+    text-shadow: calc(0.17 * $scale) calc(0.05 * $scale) 0 $text-shadow-color;
+    margin-top: calc(0.29 * $scale);
+    margin-left: calc(0.1 * $scale);
+}
+
+.player-card .aggresive {
+    color: #ff8983;
+}

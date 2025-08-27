@@ -1,0 +1,18 @@
+<div id="warning-popup" [class]="popupColor">
+    <div id="warning-details">
+        <p id="warning-content">{{ message }}</p>
+        <div id="warning-buttons">
+            @if(hasCloseButton){
+            <div class="warning-card-button" id="warning-dismiss" (click)="onCancel()">
+                <img src="./assets/images/menu/buttons/warning-popup/crossMark1.png" class="warning-button-mark" />
+                <img src="./assets/images/menu/buttons/admin-button/red-background-highlight.png" class="warning-button-container" />
+            </div>
+            } @if(isConfirmation){
+            <div class="warning-card-button" id="warning-confirm" (click)="onConfirm()">
+                <img src="./assets/images/menu/buttons/warning-popup/checkMark1.png" class="warning-button-mark" />
+                <img src="./assets/images/menu/buttons/admin-button/light-green-background-highlight.png" class="warning-button-container" />
+            </div>
+            }
+        </div>
+    </div>
+</div>

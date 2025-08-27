@@ -1,0 +1,50 @@
+<div class="chat-container">
+    <div class="background-container">
+        <div class="message-background"></div>
+        <div class="input-background"></div>
+    </div>
+    <div class="chat-body">
+        <div class="tabs-container">
+            @if (onClickAction) {
+            <div class="tab close-tab" (click)="onClickAction()">X</div>
+            }
+            <div class="tab" [class.active]="isChatActive()" (click)="switchTab(true)">Messagerie</div>
+            <div class="tab" [class.active]="!isChatActive()" (click)="switchTab(false)">Journal</div>
+            @if (!isChatActive()) {
+            <div class="filter-button" [class.active]="isFilterEnabled()" (click)="toggleFilter()">
+                <span class="filter-icon" [class.active]="isFilterEnabled()"></span>
+            </div>
+            }
+        </div>
+        @if (isChatActive()) {
+        <div class="message-container" #chatContainer>
+            @for (message of chatMessages; track $index) {
+            <p class="message">
+                <span class="message-content timestamp">[{{ message.timestamp | date: 'HH:mm:ss' }}]</span>
+                <span class="message-content sender">{{ message.sender }}:</span>
+                <span class="message-content">{{ message.content }}</span>
+            </p>
+            }
+        </div>
+        } @else {
+        <div class="message-container" #chatContainer>
+            @for (message of logs; track $index) {
+            <p class="message">
+                <span class="message-content timestamp">[{{ message.timestamp | date: 'HH:mm:ss' }}]</span>
+                <span class="message-content">{{ message.content }}</span>
+            </p>
+            }
+        </div>
+        }
+        <div class="input-container">
+            <input
+                type="text"
+                placeholder="Entrez message [Enter]"
+                class="message-input"
+                (keydown)="sendMessage($event)"
+                [maxLength]="this.maxInputLenght"
+                (click)="this.audioService.playEffect(this.clickValue)"
+            />
+        </div>
+    </div>
+</div>

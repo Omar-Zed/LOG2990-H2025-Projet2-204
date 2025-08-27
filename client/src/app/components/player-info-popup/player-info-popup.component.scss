@@ -1,0 +1,289 @@
+$main-height: 100vh;
+$main-width: 100vw;
+$side-width: 0.5;
+$margin-top: 0.07;
+$margin-bot: 0.04;
+$margin-side: 0.04;
+$player-card-height: 0.165;
+$map-size-1: calc($main-height * (1 - $margin-top - $margin-bot));
+$map-size-2: calc($main-width * (1 - $margin-side) * 1 / (1 + 2 * $side-width));
+$map-size: min($map-size-1, $map-size-2);
+$final-side-width: calc($map-size * $side-width);
+
+$height: calc($map-size * 0.8);
+$width: calc($map-size * 0.9);
+$border-size: calc($map-size * 0.05);
+$inner-height: calc($height - 2 * $border-size);
+$inner-width: calc($width - 2 * $border-size);
+$clip-size: calc($map-size * 0.03);
+
+$border-color: #49485e;
+$light-text-color: hsl(220, 1%, 100%);
+$light-text-shadow: hsl(220, 6%, 60%);
+$dark-text-color: hsl(220, 6%, 12%);
+$dark-text-shadow: rgba(120, 125, 135, 0.5);
+
+$movement-bar-transition-time: 0.25s;
+
+$background-image: '../../../assets/images/menu/containers/description/player-description.png';
+$movement-bar: '../../../assets/images/menu/stat-bar/movement-bar-large.png';
+$movement-bar-full: '../../../assets/images/menu/stat-bar/movement-bar-full.png';
+$movement-bar-full-hp: '../../../assets/images/menu/stat-bar/movement-bar-full-hp.png';
+$movement-bar-empty: '../../../assets/images/menu/stat-bar/movement-bar-empty.png';
+$movement-icon: '../../../assets/images/menu/icons/movement.png';
+$hp-icon: '../../../assets/images/menu/icons/hp.png';
+$item-container: '../../../assets/images/menu/containers/item/item-container.png';
+$x-button: '../../../assets/images/menu/buttons/play/x-button.png';
+$d4-icon: '../../../assets/images/menu/icons/small-d4.png';
+$d6-icon: '../../../assets/images/menu/icons/small-d6.png';
+
+.pop-up {
+    position: absolute;
+    top: calc(0.9 * (50vh - 0.5 * $height));
+    left: calc(50vw - 0.5 * $width);
+    height: $height;
+    width: $width;
+    overflow: visible;
+    background-image: url($background-image);
+    background-size: 100% 100%;
+    color: $dark-text-color;
+}
+
+.pop-up * {
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.self-info-container {
+    width: $width;
+    height: calc(0.15 * $map-size);
+    margin-top: calc(0.03 * $map-size);
+}
+
+.self-info-avatar {
+    display: inline-block;
+    vertical-align: top;
+    width: calc(0.12 * $map-size);
+    height: calc(0.12 * $map-size);
+    margin-top: calc(0.015 * $map-size);
+    margin-left: calc(0.045 * $map-size);
+    margin-right: calc(0.04 * $map-size);
+}
+
+.self-info-name {
+    display: inline-block;
+    vertical-align: top;
+    line-height: calc(0.15 * $map-size);
+    height: calc(0.15 * $map-size);
+    width: calc(0.56 * $map-size);
+    
+    font-size: calc(0.08 * $map-size);
+    text-shadow:
+        calc(0.06 * $map-size * 0.0172) calc(0.06 * $map-size * 0.006) 0 $dark-text-shadow,
+        calc(0.06 * $map-size * 0.0344) calc(0.06 * $map-size * 0.012) 0 $dark-text-shadow,
+        calc(0.06 * $map-size * 0.0516) calc(0.06 * $map-size * 0.018) 0 $dark-text-shadow,
+        calc(0.06 * $map-size * 0.0688) calc(0.06 * $map-size * 0.024) 0 $dark-text-shadow,
+        calc(0.06 * $map-size * 0.0860) calc(0.06 * $map-size * 0.030) 0 $dark-text-shadow;
+}
+
+button.close-button {
+    text-decoration: none;
+    outline: none;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    border: none;
+    height: calc(0.08 * $map-size);
+    width: calc(0.08 * $map-size);
+    margin-top: calc(0.032 * $map-size);
+    background-image: url($x-button);
+    background-color: transparent;
+}
+
+button.close-button:hover {
+    filter: saturate(0.96) brightness(1.16) grayscale(0.06);
+}
+
+button.close-button:active {
+    filter: saturate(0.92) brightness(1.32) grayscale(0.12);
+}
+
+.movement-container {
+    margin-left: calc(0.082 * $map-size);
+    width: calc(0.75 * $map-size);
+    height: calc(0.125 * $map-size);
+    margin-top: calc(0.02 * $map-size);
+}
+
+.movement-text {
+    width: calc(0.75 * $map-size);
+    height: calc(0.06 * $map-size);
+    
+    font-size: calc(0.05 * $map-size);
+    text-shadow:
+        calc(0.03 * $map-size * 0.0172) calc(0.03 * $map-size * 0.006) 0 $dark-text-shadow,
+        calc(0.03 * $map-size * 0.0344) calc(0.03 * $map-size * 0.012) 0 $dark-text-shadow,
+        calc(0.03 * $map-size * 0.0516) calc(0.03 * $map-size * 0.018) 0 $dark-text-shadow,
+        calc(0.03 * $map-size * 0.0688) calc(0.03 * $map-size * 0.024) 0 $dark-text-shadow,
+        calc(0.03 * $map-size * 0.0860) calc(0.03 * $map-size * 0.030) 0 $dark-text-shadow;
+}
+
+.movement-bar {
+    height: calc(0.05 * $map-size);
+    width: calc(0.75 * $map-size);
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+
+.movement-bar-top,
+.movement-bar-mid,
+.movement-bar-bot {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    height: calc(0.05 * $map-size);
+    width: calc(0.75 * $map-size);
+}
+
+.movement-bar-top {
+    background-image: url($movement-bar);
+}
+
+.movement-bar-mid {
+    margin: calc(0.05 * $map-size * 0.22222222222) calc((0.75 * $map-size) * 0.005);
+    width: calc(var(--cur-move) / var(--max-move) * (0.75 * $map-size) * 0.99);
+    height: calc(0.05 * $map-size * 0.55555555555);
+    background-image: url($movement-bar-full);
+    transition: width $movement-bar-transition-time ease-in-out;
+}
+
+.hp .movement-bar-mid {
+    background-image: url($movement-bar-full-hp);
+}
+
+.movement-bar-bot {
+    margin: calc(0.05 * $map-size * 0.22222222222) calc((0.75 * $map-size) * 0.005);
+    width: calc((0.75 * $map-size) * 0.99);
+    height: calc(0.05 * $map-size * 0.55555555555);
+    background-image: url($movement-bar-empty);
+}
+
+.movement-text-left {
+    display: inline-block;
+    vertical-align: top;
+    width: 70%;
+    height: calc(0.045 * $map-size);
+    line-height: calc(0.045 * $map-size);
+    padding-left: calc(0.005 * $map-size);
+}
+
+.movement-text-right {
+    display: inline-block;
+    vertical-align: top;
+    width: 30%;
+    height: calc(0.045 * $map-size);
+    line-height: calc(0.045 * $map-size);
+    padding-right: calc(0.005 * $map-size);
+    text-align: right;
+}
+
+.pop-up .movement-icon {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: calc(-0.005 * $map-size);
+    height: calc(0.055 * $map-size);
+    width: calc(0.055 * $map-size);
+    background-size: contain;
+    background-image: url($movement-icon);
+}
+
+.pop-up .hp .movement-icon {
+    background-image: url($hp-icon);
+}
+
+.items-container {
+    width: calc(0.75 * $map-size);
+    height: calc(0.195 * $map-size);
+    margin-top: calc(0.060 * $map-size);
+    margin-left: calc(0.083 * $map-size);
+    overflow: visible;
+}
+
+.pop-up .item-slot {
+    overflow: visible;
+    display: inline-block;
+    vertical-align: top;
+    width: calc(0.195 * $map-size);
+    height: calc(0.195 * $map-size);
+    background-size: contain;
+}
+
+.item-slot:nth-child(2) {
+    margin-left: calc(0.02 * $map-size);
+}
+
+.item-slot {
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: top;
+    width: calc(0.195 * $map-size);
+    height: calc(0.195 * $map-size);
+    background: url($item-container);
+}
+
+.item-icon {
+    overflow: visible;
+    width: calc(0.195 * $map-size);
+    height: calc(0.195 * $map-size);
+}
+
+.dice-container {
+    display: inline-block;
+    vertical-align: top;
+    width: calc(0.32 * $map-size);
+    height: calc(0.195 * $map-size);
+    margin-left: calc(0.043 * $map-size);
+    margin-top: calc(-0.005 * $map-size);
+}
+
+.dice-row {
+    width: calc(0.32 * $map-size);
+    height: calc(0.195 * 0.5 * $map-size);
+}
+
+.dice-text {
+    display: inline-block;
+    vertical-align: top;
+    height: calc(0.195 * 0.5 * $map-size);
+    line-height: calc(0.195 * 0.5 * $map-size);
+    font-size: calc(0.05 * $map-size);
+    width: calc(0.20 * $map-size);
+    text-shadow:
+        calc(0.03 * $map-size * 0.0172) calc(0.03 * $map-size * 0.006) 0 $dark-text-shadow,
+        calc(0.03 * $map-size * 0.0344) calc(0.03 * $map-size * 0.012) 0 $dark-text-shadow,
+        calc(0.03 * $map-size * 0.0516) calc(0.03 * $map-size * 0.018) 0 $dark-text-shadow,
+        calc(0.03 * $map-size * 0.0688) calc(0.03 * $map-size * 0.024) 0 $dark-text-shadow,
+        calc(0.03 * $map-size * 0.0860) calc(0.03 * $map-size * 0.030) 0 $dark-text-shadow;
+}
+
+.dice {
+    display: inline-block;
+    vertical-align: top;
+    width: calc(0.195 * 0.5 * $map-size);
+    height: calc(0.195 * 0.5 * $map-size);
+    background-image: url($d6-icon);
+}
+
+.d4 {
+    background-image: url($d4-icon);
+}
+
+.hide,
+.hide *,
+.pop-up.hide * {
+    display: none;
+    pointer-events: none;
+    user-select: none;
+}

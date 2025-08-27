@@ -1,0 +1,53 @@
+<div class="pop-up" [class.hide]="!isVisible">
+    <div class="self-info-container">
+        <div class="self-info-avatar" [style.backgroundImage]="'url(' + avatarData[matchService.data.players[playerIndex].avatar].imageCentered"></div>
+        <div class="self-info-name">{{ matchService.data.players[playerIndex].name }}</div>
+        <button class="close-button" (click)="closeButton();this.audioService.playEffect(this.clickValue)">X</button>
+    </div>
+    <div class="movement-container hp">
+        <div class="movement-text">
+            <div class="movement-text-left">
+                Points de vie
+                <div class="movement-icon"></div>
+            </div>
+            <div class="movement-text-right">{{ matchService.data.players[playerIndex].health }} / {{ matchService.data.players[playerIndex].health }}</div>
+        </div>
+        <div class="movement-bar" [ngStyle]="{ '--cur-move': 1, '--max-move': 1 }">
+            <div class="movement-bar-bot"></div>
+            <div class="movement-bar-mid"></div>
+            <div class="movement-bar-top"></div>
+        </div>
+    </div>
+    <div class="movement-container">
+        <div class="movement-text">
+            <div class="movement-text-left">
+                Points de mouvement
+                <div class="movement-icon"></div>
+            </div>
+            <div class="movement-text-right">{{ matchService.data.playData.activePlayerIndex === playerIndex ? matchService.data.playData.movementLeft : matchService.data.players[playerIndex].speed }} / {{ matchService.data.players[playerIndex].speed }}</div>
+        </div>
+        <div class="movement-bar" [ngStyle]="{ '--cur-move': matchService.data.playData.activePlayerIndex === playerIndex ? matchService.data.playData.movementLeft : matchService.data.players[playerIndex].speed, '--max-move': matchService.data.players[playerIndex].speed }">
+            <div class="movement-bar-bot"></div>
+            <div class="movement-bar-mid"></div>
+            <div class="movement-bar-top"></div>
+        </div>
+    </div>
+    <div class="items-container">
+        <div class="item-slot">
+            <div class="item-icon"><app-item [itemType]="matchService.data.players[playerIndex].items[0]" [showDescription]="true"></app-item></div>
+        </div>
+        <div class="item-slot">
+            <div class="item-icon"><app-item [itemType]="matchService.data.players[playerIndex].items[1]" [showDescription]="true"></app-item></div>
+        </div>
+        <div class="dice-container">
+            <div class="dice-row">
+                <div class="dice-text">Attaque :</div>
+                <div class="dice" [class.d4]="matchService.data.players[playerIndex].attackDice === 4"></div>
+            </div>
+            <div class="dice-row">
+                <div class="dice-text">Défense :</div>
+                <div class="dice" [class.d4]="matchService.data.players[playerIndex].defenseDice === 4"></div>
+            </div>
+        </div>
+    </div>
+</div>

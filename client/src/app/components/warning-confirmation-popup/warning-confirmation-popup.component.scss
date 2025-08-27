@@ -1,0 +1,156 @@
+$base-size: min(0.7vh, 0.2vw);
+
+$corner-square-size: min(0.6vh, 0.6vw);
+$clip-path: polygon(
+    $corner-square-size 0%,
+    calc(100% - #{$corner-square-size}) 0%,
+
+    calc(100% - #{$corner-square-size}) $corner-square-size,
+    100% $corner-square-size,
+
+    100% calc(100% - #{$corner-square-size}),
+    calc(100% - #{$corner-square-size}) calc(100% - #{$corner-square-size}),
+    calc(100% - #{$corner-square-size}) 100%,
+    $corner-square-size 100%,
+
+    $corner-square-size calc(100% - #{$corner-square-size}),
+    0% calc(100% - #{$corner-square-size}),
+    0% $corner-square-size,
+    $corner-square-size $corner-square-size
+);
+
+$inner-shadow-width: min(0.3vw, 0.8vh);
+$green-inner-shadow:
+    inset $inner-shadow-width 0 0 0 #b3f6a8,
+    inset calc($inner-shadow-width * -1) 0 0 0 #7a9765,
+    inset 0 $inner-shadow-width 0 0 #b3f6a8,
+    inset 0 calc($inner-shadow-width * -1) 0 0 #7a9765;
+
+$orange-inner-shadow:
+    inset $inner-shadow-width 0 0 0 #d0a236,
+    inset calc($inner-shadow-width * -1) 0 0 0 #9f4c0f,
+    inset 0 $inner-shadow-width 0 0 #d0a236,
+    inset 0 calc($inner-shadow-width * -1) 0 0 #9f4c0f;
+
+$blue-inner-shadow:
+    inset $inner-shadow-width 0 0 0 #80c0d8,
+    inset calc($inner-shadow-width * -1) 0 0 0 #2878b0,
+    inset 0 $inner-shadow-width 0 0 #80c0d8,
+    inset 0 calc($inner-shadow-width * -1) 0 0 #2878b0;
+
+$text-shadow-color: #707070;
+
+#warning-popup {
+    user-select: none;
+    position: relative;
+    min-height: calc($base-size * 10);
+    min-width: calc($base-size * 90);
+    max-width: calc($base-size * 170);
+    overflow: visible;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: calc($base-size * 2) calc($base-size * 2);
+
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    border: calc($corner-square-size * 2) solid #48485f;
+    clip-path: $clip-path;
+}
+
+.orange {
+    background-image: url('../../../assets/images/menu/containers/orange/orange-scrare-body.png');
+    box-shadow: $orange-inner-shadow;
+}
+
+.blue {
+    background-image: url('../../../assets/images/menu/containers/dark-blue/dark-blue-scrare-body.png');
+    box-shadow: $blue-inner-shadow;
+}
+
+.green {
+    background-image: url('../../../assets/images/menu/containers/green/green-scrare-body.png');
+    box-shadow: $green-inner-shadow;
+}
+
+#warning-popup::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: calc($base-size * 7.5);
+    z-index: 0;
+}
+
+#warning-details {
+    width: 100%;
+    display: flex;
+    position: relative;
+    padding: calc($base-size * 2) calc($base-size * 5);
+    flex-direction: column;
+    align-items: center;
+    gap: 1vw;
+    color: white;
+    text-shadow: calc($base-size * 0.8) 0 0 $text-shadow-color;
+
+    text-align: center;
+    p {
+        position: relative;
+        font-size: calc($base-size * 8);
+        text-wrap: wrap;
+    }
+}
+#warning-content {
+    white-space: pre;
+    text-align: left;
+    line-height: calc($base-size * 12);
+}
+
+#warning-buttons {
+    display: flex;
+    height: calc($base-size * 13);
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+.warning-card-button {
+    height: 80%;
+    aspect-ratio: 20/9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.warning-card-button .warning-button-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    user-select: none;
+    overflow: visible;
+}
+
+.warning-card-button:active .warning-button-container,
+.warning-card-single-button:active .warning-button-container {
+    rotate: 180deg;
+}
+
+.warning-card-button:hover .warning-button-container,
+.warning-card-single-button:hover .warning-button-container {
+    filter: brightness(1.15);
+}
+
+.warning-button-mark {
+    z-index: 1;
+    filter: invert(0.95);
+    height: 100%;
+    padding: 15% 30%;
+}

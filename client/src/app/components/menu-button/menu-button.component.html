@@ -1,0 +1,12 @@
+<article [ngClass]="['container', containerClass]" (click)="navigateWithDelay()">
+    <div class="border top-border"></div>
+    <div class="border bottom-border"></div>
+    <div class="border left-border"></div>
+    <div class="border right-border"></div>
+    <div class="body" [ngClass]="{ 'active-pokeball': isActive }">
+        <p [innerHTML]="textContent"></p>
+        <img [src]="spriteImage" class="pokemon-img" />
+        <img src="./assets/images/menu/buttons/poke-button/party-ball.png" class="pokeball-img pokeball-close" />
+        <img src="./assets/images/menu/buttons/poke-button/party-ball-sel.png" class="pokeball-img pokeball-open" />
+    </div>
+</article>

@@ -1,0 +1,182 @@
+$size: calc(min(55vh, 30.3514vw)* 0.95);
+$border-corner: calc($size * 0.017);
+$border-width: calc($size * 0.029);
+
+$blue-border-color: rgb(246, 119, 56);
+$blue-inner-border-color: rgb(170, 231, 247) rgb(75, 166, 198) rgb(75, 166, 198) rgb(170, 231, 247);
+$blue-active-inner-border-color: rgb(75, 166, 198) rgb(170, 231, 247) rgb(170, 231, 247) rgb(75, 166, 198);
+
+$orange-border-color: rgb(72, 72, 95);
+$orange-inner-border-color: rgb(208, 162, 54) rgb(159, 76, 15) rgb(159, 76, 15) rgb(208, 162, 54);
+$orange-active-inner-border-color: rgb(159, 76, 15) rgb(208, 162, 54) rgb(208, 162, 54) rgb(159, 76, 15);
+
+$green-border-color: rgb(249, 248, 128);
+$green-inner-border-color: rgb(179, 246, 168) rgb(122, 151, 101) rgb(122, 151, 101) rgb(179, 246, 168);
+$green-active-inner-border-color: rgb(122, 151, 101) rgb(179, 246, 168) rgb(179, 246, 168) rgb(122, 151, 101);
+
+.container {
+    height: $size;
+    width: $size;
+    position: relative;
+    display: flex;
+    cursor: pointer;
+    overflow: visible;
+}
+
+.container * {
+    user-select: none;
+}
+
+.container:hover {
+    filter: brightness(1.14);
+}
+
+.container .border {
+    position: absolute;
+    background-color: $blue-border-color;
+}
+
+.orange-container .border {
+    background-color: $orange-border-color;
+}
+
+.green-container .border {
+    background-color: $green-border-color;
+}
+
+.top-border,
+.bottom-border {
+    width: calc(100% - $border-corner * 2);
+    height: calc($border-width);
+    right: $border-corner;
+}
+
+.left-border,
+.right-border {
+    height: calc(100% - $border-corner * 2);
+    width: calc($border-width);
+    top: $border-corner;
+}
+
+.bottom-border {
+    bottom: 0;
+}
+
+.top-border {
+    top: 0;
+}
+
+.left-border {
+    left: 0;
+}
+
+.right-border {
+    right: 0;
+}
+
+.container .body {
+    background-image: url('../../../assets/images/menu/containers/blue/blue-scrare-body.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: calc($size - $border-width * 1.5);
+    height: calc($size - $border-width * 1.5);
+    margin: auto;
+    border-style: solid;
+    border-width: calc($size * 0.024);
+    border-color: $blue-inner-border-color;
+    overflow: visible;
+}
+
+.container:active .body {
+    border-color: $blue-active-inner-border-color;
+}
+
+.orange-container .body {
+    background-image: url('../../../assets/images/menu/containers/orange/orange-scrare-body.png');
+    border-color: $orange-inner-border-color;
+}
+
+.orange-container:active .body {
+    border-color: $orange-active-inner-border-color;
+}
+
+.green-container .body {
+    background-image: url('../../../assets/images/menu/containers/green/green-scrare-body.png');
+    border-color: $green-inner-border-color;
+}
+
+.green-container:active .body {
+    border-color: $green-active-inner-border-color;
+}
+
+.container p {
+    font-family: 'pixel';
+    text-shadow: calc($size * 0.011) 0 0 rgba(0, 0, 0, 0.5);
+    line-height: 80%;
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    overflow: visible;
+    font-size: calc($size * 0.16);
+    text-shadow:
+        calc($size * 0.12 * 0.0172) calc($size * 0.12 * 0.006) 0 rgb(120, 120, 120),
+        calc($size * 0.12 * 0.0344) calc($size * 0.12 * 0.012) 0 rgb(120, 120, 120),
+        calc($size * 0.12 * 0.0516) calc($size * 0.12 * 0.018) 0 rgb(120, 120, 120),
+        calc($size * 0.12 * 0.0688) calc($size * 0.12 * 0.024) 0 rgb(120, 120, 120),
+        calc($size * 0.12 * 0.0860) calc($size * 0.12 * 0.030) 0 rgb(120, 120, 120);
+}
+
+.container .pokemon-img {
+    position: absolute;
+    bottom: -6.8%;
+    right: -13.6%;
+    height: 85%;
+    width: auto;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.container .pokeball-img {
+    position: absolute;
+    bottom: calc($size * 0.04);
+    left: calc($size * 0.08);
+    height: calc($size * 0.5);
+    width: auto;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.container .pokeball-open {
+    opacity: 0;
+}
+
+.container:hover .pokeball-img {
+    animation: wobbling 450ms infinite alternate;
+}
+
+@keyframes wobbling {
+    0% {
+        transform: rotate(0deg);
+    }
+    13% {
+        transform: rotate(10deg);
+    }
+    26% {
+        transform: rotate(-10deg);
+    }
+    39% {
+        transform: rotate(0deg);
+    }
+}
+
+.container:active .pokeball-open,
+.container .active-pokeball .pokeball-open {
+    opacity: 1;
+    animation: none;
+}
+
+.container:active .pokeball-close,
+.container .active-pokeball .pokeball-close {
+    opacity: 0;
+}

@@ -1,0 +1,132 @@
+<div
+    class="play-page"
+    [ngStyle]="{
+        '--player-count': matchService.data.players.length,
+        '--current-player-turn': matchService.data.playData.activePlayerIndex,
+        '--bg-url': 'url(' + visualData.thumbnailUrl + ')'
+    }"
+    (click)="hideTileDescription()"
+>
+    <div class="thumbnail-background"></div>
+    <main>
+        @if(visualData.isInventoryFull) {
+            <app-item-drop-popup [inventoryItems]="matchService.selfPlayer.items"></app-item-drop-popup>
+        }
+        <div class="main-left">
+            <div class="player-cards-container">
+                <div class="player-arrow-container">
+                    <div class="player-arrow"
+                        [class.active-red]="matchService.data.players[matchService.data.playData.activePlayerIndex].team === 'rouge'"
+                        [class.active-blue]="matchService.data.players[matchService.data.playData.activePlayerIndex].team === 'bleu'"
+                    ></div>
+                </div>
+                <div class="player-cards">
+                    @for (player of visualData.players; track player.id) {
+                    <div class="player-card"
+                        [class.has-left]="!player.isConnected"
+                        [class.is-admin]="player.isHost"
+                        [class.is-aggressive-bot]="player.botType === 'botAggressive'"
+                        [class.is-defensive-bot]="player.botType === 'botDefensive'"
+                        [class.is-blue-team]="player.team === 'bleu'"
+                        [class.is-red-team]="player.team === 'rouge'"
+                        [class.has-flag]="player.hasFlag"
+                        (click)="showPlayerDescription($index)"
+                    >
+                        <div class="player-card-left">
+                            <div class="player-avatar" [style.backgroundImage]="'url(' + player.avatarUrl + ')'"></div>
+                            <div class="player-name">{{ player.name }}</div>
+                            <div class="info-icon"></div>
+                        </div>
+                        <div class="player-card-right">
+                            @if (player.team === 'none') {
+                                <div class="sword-icon"></div>
+                                <div class="player-combats">{{ player.combatsWon }}/3</div>
+                            } @else {
+                                <div class="flag-icon"></div>
+                                <div class="sword-icon"></div>
+                                <div class="player-combats">{{ player.combatsWon }}</div>
+                            }
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+            <div class="chat-container">
+                <app-chat></app-chat>
+            </div>
+        </div>
+        <div class="main-center" (contextmenu)="showTileDescription($event)">
+            <app-map [isEditor]="false"></app-map>
+            <div
+                id="tool-description"
+                [style.display]="tileDescriptionService.visible ? 'block' : 'none'"
+                [style.top.px]="tileDescriptionService.position.y"
+                [style.left.px]="tileDescriptionService.position.x"
+            >
+                <div class="item-description" [innerHTML]="tileDescriptionService.description"></div>
+            </div>
+        </div>
+        <div class="main-right">
+            <div class="map-info-card">
+                <div>Taille de la carte : {{ matchService.data.gameData.mapData.size }} x {{ matchService.data.gameData.mapData.size }}</div>
+                <div>Mode de jeu : {{ matchService.data.gameData.mapData.gameMode }}
+                    @if (matchService.data.playData.isDebugMode) {
+                        <span class="debug-text">DEBUG</span>
+                    }
+                </div>
+                <div>Nombre de joueurs : {{ visualData.currentPlayerCount }} / {{ matchService.data.players.length }}</div>
+                <button (click)="surrenderButton()" class="surrender-button">< Abandonner</button>
+            </div>
+            <div class="self-info-card">
+                <div class="self-info-container">
+                    <div class="self-info-avatar" [style.backgroundImage]="'url(' + visualData.selfAvatarUrl"></div>
+                    <div class="self-info-name">{{ matchService.selfPlayer.name }}</div>
+                    <button (click)="infoButton()" class="info-button"></button>
+                </div>
+                <div class="movement-container">
+                    <div class="movement-text">
+                        <div class="movement-text-left">
+                            Mouvement
+                            <div class="movement-icon"></div>
+                        </div>
+                        <div class="movement-text-right">{{ visualData.movementLeft }} / {{ matchService.selfPlayer.speed }}</div>
+                    </div>
+                    <div class="movement-bar" [ngStyle]="{ '--cur-move': visualData.movementLeft, '--max-move': matchService.selfPlayer.speed }">
+                        <div class="movement-bar-bot"></div>
+                        <div class="movement-bar-mid"></div>
+                        <div class="movement-bar-top"></div>
+                    </div>
+                </div>
+                <div class="items-container">
+                    <div class="item-slot">
+                        <div class="item-icon"><app-item [itemType]="matchService.selfPlayer.items[0]" [showDescription]="true"></app-item></div>
+                    </div>
+                    <div class="item-slot">
+                        <div class="item-icon"><app-item [itemType]="matchService.selfPlayer.items[1]" [showDescription]="true"></app-item></div>
+                    </div>
+                </div>
+            </div>
+            <button (click)="actionButton()" class="action-button" [class.active]="visualData.canUseAction">Action</button>
+            <button (click)="endTurnButton()" class="endturn-button" [class.active]="visualData.canEndTurn">Terminer le tour</button>
+        </div>
+        <div
+            class="timer"
+            [class.active]="playService.timer.isStarted"
+            [ngStyle]="{
+                '--max-time': playService.timer.maxTime,
+                '--current-time': playService.timer.currentTime,
+                '--pause-time': playService.timer.lastUnpauseTime
+            }"
+        >
+            <div class="timer-bar">
+                <div class="timer-image"></div>
+            </div>
+            <div class="timer-text">{{ playService.timer.currentTimeRounded }}</div>
+        </div>
+    </main>
+    <div id="player-info-popup" [class.visible]="showPlayerInfoPopup" (click)="hidePlayerDescription()">
+        <div class="popup-content" (click)="$event.stopPropagation()">
+            <app-player-info-popup [isVisible]="showPlayerInfoPopup" [playerIndex]="descriptionPlayerIndex" [closeButton]="hidePlayerDescription.bind(this)"></app-player-info-popup>
+        </div>
+    </div>
+</div>

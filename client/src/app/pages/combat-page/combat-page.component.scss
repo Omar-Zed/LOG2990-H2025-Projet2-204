@@ -1,0 +1,781 @@
+$gray-border-color: #636776;
+$wheat-border-color: #e9f6f7;
+$stripes-color1: #e0f6e1;
+$stripes-color2: #ddf3de;
+$timer-color: #585851;
+
+$page-border-width: 0.5vw;
+$padding-wheat-border: 0.7vw;
+$stripes-size-1: 2.2vh;
+$stripes-size-2: 1.1vh;
+
+$combat-info-height: 28vh;
+
+* {
+    font-family: 'pixel';
+    color: #585851;
+}
+
+#combat-page {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        $stripes-color1,
+        $stripes-color1 $stripes-size-2,
+        $stripes-color2 $stripes-size-2,
+        $stripes-color2 $stripes-size-1 * 2
+    );
+    background-size: 100% ($stripes-size-1 * 2);
+    animation: fall 3s linear infinite;
+}
+
+@keyframes fall {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 0 $stripes-size-1 * 2;
+    }
+}
+
+#timer {
+    position: absolute;
+    top: 0.5vh;
+    right: 0.5vh;
+    font-size: 7vh;
+    display: flex;
+    align-items: center;
+    user-select: none;
+}
+
+.timer-container {
+    height: 6vh;
+    width: 6vh;
+    margin-left: 1vh;
+    margin-right: 1vh;
+    user-select: none;
+    position: relative;
+}
+
+.timer-icon {
+    position: absolute;
+    height: 6vh;
+    width: 6vh;
+    background-image: url('../../../assets/images/menu/icons/clock-icon.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.6;
+}
+
+.timer-icon.active {
+    animation: rotate-background calc(var(--max-time) * 1s) steps(4) 1 forwards;
+}
+
+@keyframes rotate-background {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.debug-info {
+    margin: 0 0.8vw 0 0;
+    color: #e00004;
+}
+
+#enemy-container {
+    position: absolute;
+    top: 20vh;
+    right: 7vw;
+    width: 45%;
+    height: 30%;
+    overflow: visible;
+}
+
+#enemy-container .battel-plateform {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    pointer-events: none;
+    user-select: none;
+}
+
+#enemy-container .pokemon-container {
+    overflow: visible;
+    z-index: 1;
+    width: 100%;
+    position: absolute;
+    bottom: 4.5vw;
+    left: 0;
+    display: flex;
+    justify-content: center;
+}
+
+#enemy-container .pokemon-gif {
+    overflow: visible;
+    width: 30%;
+    pointer-events: none;
+    user-select: none;
+}
+
+#enemy-container .pokemon-evolved-gif {
+    width: 50%;
+}
+
+#self-container {
+    position: absolute;
+    bottom: $combat-info-height;
+    left: 7vw;
+    height: 30%;
+    width: 45%;
+    overflow: visible;
+}
+
+#self-container .battel-plateform {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    pointer-events: none;
+    user-select: none;
+}
+
+#self-container .pokemon-container {
+    overflow: visible;
+    position: relative;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    z-index: 3;
+}
+
+#self-container .pokemon-gif {
+    overflow: visible;
+    width: 50%;
+    transform: translateY(20%);
+    pointer-events: none;
+    user-select: none;
+}
+
+#self-container .pokemon-evolved-gif {
+    width: 70%;
+}
+
+#enemy-container .mew {
+    width: 50%;
+}
+
+#self-container .mew {
+    width: 70%;
+}
+
+#self-container .pokemon-container.combatAnimation.successAttack.is-turn:not(.is-dead) {
+    animation: self-hurt 0.5s ease-in-out forwards;
+}
+
+#enemy-container .pokemon-container.combatAnimation.successAttack.is-turn:not(.is-dead) {
+    animation: enemy-hurt 0.5s ease-in-out forwards;
+}
+
+#self-container .pokemon-container.combatAnimation.successAttack:not(.is-dead):not(.is-turn),
+#self-container .pokemon-container.combatAnimation.failAttack:not(.is-dead):not(.is-turn) {
+    animation: self-attack 0.5s ease-in-out forwards;
+}
+
+#enemy-container .pokemon-container.combatAnimation.successAttack:not(.is-dead):not(.is-turn),
+#enemy-container .pokemon-container.combatAnimation.failAttack:not(.is-dead):not(.is-turn) {
+    animation: enemy-attack 0.5s ease-in-out forwards;
+}
+
+#self-container .pokemon-container.combatAnimation.successEscape:not(.is-dead):not(.is-turn),
+#self-container .pokemon-container.combatEnd.successEscape:not(.is-dead):not(.is-turn) {
+    animation: self-escape 1.5s cubic-bezier(0.45, 0, 1, 1) forwards;
+}
+
+#enemy-container .pokemon-container.combatAnimation.successEscape:not(.is-dead):not(.is-turn),
+#enemy-container .pokemon-container.combatEnd.successEscape:not(.is-dead):not(.is-turn) {
+    animation: enemy-escape 1.5s cubic-bezier(0.45, 0, 1, 1) forwards;
+}
+
+#enemy-container .pokemon-container.is-healing,
+#self-container .pokemon-container.is-healing {
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    animation: healing 1.5s cubic-bezier(0.45, 0, 1, 1) forwards;
+}
+
+#self-container .is-dead {
+    animation: self-death 1.5s ease-in-out forwards;
+}
+
+#enemy-container .is-dead {
+    animation: enemy-death 1.5s ease-in-out forwards;
+}
+
+.hp-container {
+    position: absolute;
+    bottom: $combat-info-height;
+    right: 7vw;
+    width: 38vw;
+    aspect-ratio: 17/5;
+    background-image: url('../../../assets/images/menu/containers/description/battle-player-safari-rotated.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 2;
+    user-select: none;
+}
+
+.enemy-hp-container {
+    background-image: url('../../../assets/images/menu/containers/description/battle-player-safari-rotated-mirorded.png');
+    bottom: 70%;
+    left: -40vw;
+}
+
+.hp-container .body {
+    height: 77%;
+    width: 84%;
+    margin: 2% 0 0 11%;
+    position: relative;
+}
+
+.enemy-hp-container .body {
+    margin: 2% 0 0 5%;
+}
+
+.hp-container .name {
+    position: absolute;
+    top: 6%;
+    left: 5%;
+    font-size: 2.4vw;
+}
+
+.hp-container .hp-bar {
+    position: absolute;
+    bottom: 40%;
+    right: 4%;
+    width: 65%;
+    aspect-ratio: 20/1.1;
+    background-image: url('../../../assets/images/menu/stat-bar/hp-bar.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: end;
+    overflow: visible;
+}
+
+.hp-container .hp-bar .hp-backround {
+    background-color: #727272;
+    width: 77%;
+    height: 100%;
+    margin: 2%;
+    z-index: -1;
+    display: flex;
+    justify-content: start;
+}
+
+.hp-container .hp-bar .hp-backround .hp-progress {
+    height: 100%;
+    width: 100%;
+    background-color: #50d16c;
+    transition:
+        width 0.3s ease-in-out,
+        color 0.3s ease-in-out;
+}
+
+.hp-container .hp-bar .hp-backround .orange-hp {
+    background-color: #f7a440;
+}
+
+.hp-container .hp-bar .hp-backround .red-hp {
+    background-color: #f74c4c;
+}
+
+.hp-value {
+    position: absolute;
+    right: 0;
+    bottom: -150%;
+    font-size: 2.4vw;
+}
+
+.hp-container .dice-bonus {
+    position: absolute;
+    bottom: 5%;
+    left: 5%;
+    font-size: 2.1vw;
+    opacity: 0.8;
+}
+
+#combat-footer {
+    position: absolute;
+    bottom: 0;
+    height: $combat-info-height;
+    width: 100%;
+    background-color: #283030;
+    z-index: 4;
+    padding: 0.5vw;
+    display: flex;
+}
+
+.container-border {
+    height: 100%;
+    width: auto;
+    pointer-events: none;
+    user-select: none;
+}
+
+.container-body {
+    height: 100%;
+    background-image: url('../../../assets/images/menu/containers/combat-container/combat-container-body.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    flex: 1;
+}
+
+#action-container {
+    display: flex;
+    flex: 4;
+}
+
+#action-container .container-body {
+    padding: 3% 0% 3% 0%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+#action-container .action-button p {
+    font-size: 4.5vw;
+    text-align: end;
+    user-select: none;
+}
+
+.action-button {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: opacity 0.05s ease-in-out;
+    filter: brightness(0.8);
+}
+
+.container-selection {
+    height: 3vw;
+    width: auto;
+    margin: 7%;
+    pointer-events: none;
+    user-select: none;
+    opacity: 0;
+    transition: opacity 0.05s ease-in-out;
+}
+
+.action-button:hover .container-selection {
+    opacity: 1;
+}
+
+.action-button:active {
+    filter: brightness(1.3);
+}
+
+.not-current-turn .action-button {
+    opacity: 0.3;
+    cursor: default;
+    pointer-events: none;
+}
+
+#combat-footer #action-container .disabled {
+    opacity: 0.3;
+    cursor: default;
+    pointer-events: none;
+}
+
+.empty-button {
+    font-size: 4.5vw;
+    user-select: none;
+    text-align: start;
+    text-indent: 20%;
+    align-self: center;
+    color: #585851;
+}
+
+#stats-container {
+    display: flex;
+    flex: 3;
+    margin: 0 0 0 1%;
+}
+
+#stats-container .container-body {
+    padding: 3% 5% 3% 2%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.stat-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    color: #585851;
+    font-size: 5.5vh;
+    user-select: none;
+}
+
+.stat-value {
+    text-align: left;
+}
+
+.buff {
+    color: #1cb907;
+}
+
+.nerf {
+    color: #ff0000;
+}
+
+.stat-label {
+    text-align: left;
+    width: 36%;
+    overflow: visible;
+}
+
+.chat-button {
+    position: absolute;
+    bottom: calc(1.05 * $combat-info-height);
+    left: 1%;
+    width: 5vw;
+    aspect-ratio: 1/1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 10;
+}
+
+.chat-button.disabel {
+    opacity: 0;
+    transition: opacity 0s ease-in;
+}
+
+.chat-button .button-background {
+    background: rgba(0, 0, 0, 0.2);
+    text-align: center;
+    filter: blur(0.3em);
+    border-radius: 20%;
+    width: 80%;
+    height: 80%;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.chat-button:hover .button-background {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.chat-button:active .button-background {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.button-icon {
+    height: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease-in-out;
+}
+
+.chat-container {
+    position: absolute;
+    width: 38%;
+    height: 40%;
+    z-index: 1;
+    margin: 0 0 1.8% 0;
+    bottom: calc(0.97 * $combat-info-height);
+    left: 0.7%;
+    opacity: 1;
+    transform-origin: bottom left;
+    transform: scale(1);
+    z-index: 10;
+    transition:
+        opacity 0.3s ease-out,
+        transform 0.2s ease-out;
+}
+
+.chat-container.disabel {
+    opacity: 0;
+    transform: scale(0);
+    visibility: hidden;
+    transition:
+        opacity 0.3s ease-in,
+        transform 0.2s ease-in,
+        visibility 0s 0.4s;
+}
+
+@keyframes enemy-attack {
+    0% {
+        transform: translateX(0) translateY(0);
+    }
+    35% {
+        transform: translateX(-5.8vw) translateY(1.8vw);
+    }
+    65% {
+        transform: translateX(-5.8vw) translateY(1.8vw);
+    }
+    100% {
+        transform: translateX(0) translateY(0);
+    }
+}
+
+@keyframes self-attack {
+    0% {
+        transform: translateX(0) translateY(0);
+    }
+    35% {
+        transform: translateX(7vw) translateY(-3.5vw);
+    }
+    65% {
+        transform: translateX(7vw) translateY(-3.5vw);
+    }
+    100% {
+        transform: translateX(0) translateY(0);
+    }
+}
+
+@keyframes self-escape {
+    0% {
+        transform: translateX(0) translateY(0);
+        opacity: 1;
+    }
+    40% {
+        transform: translateX(-12vw) translateY(6vw);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(-12vw) translateY(6vw);
+        opacity: 0;
+    }
+}
+
+@keyframes enemy-escape {
+    0% {
+        transform: translateX(0) translateY(0);
+        opacity: 1;
+    }
+    40% {
+        transform: translateX(12vw) translateY(-6vw);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(12vw) translateY(-6vw);
+        opacity: 0;
+    }
+}
+
+@keyframes self-hurt {
+    0% {
+        filter: none;
+        transform: translateX(0) translateY(0);
+    }
+    20% {
+        filter: none;
+        transform: translateX(0) translateY(0);
+    }
+    40% {
+        filter: sepia(100%) saturate(300%) hue-rotate(-50deg) brightness(70%);
+        transform: translateX(0) translateY(0);
+    }
+    60% {
+        filter: sepia(100%) saturate(300%) hue-rotate(-50deg) brightness(70%);
+        transform: translateX(-2vw) translateY(1vw);
+    }
+    80% {
+        filter: sepia(100%) saturate(300%) hue-rotate(-50deg) brightness(70%);
+        transform: translateX(0) translateY(0);
+    }
+    100% {
+        filter: none;
+        transform: translateX(0) translateY(0);
+    }
+}
+
+@keyframes enemy-hurt {
+    0% {
+        filter: none;
+        transform: translateX(0) translateY(0);
+    }
+    20% {
+        filter: none;
+        transform: translateX(0) translateY(0);
+    }
+    40% {
+        filter: sepia(100%) saturate(300%) hue-rotate(-50deg) brightness(70%);
+        transform: translateX(0) translateY(0);
+    }
+    60% {
+        filter: sepia(100%) saturate(300%) hue-rotate(-50deg) brightness(70%);
+        transform: translateX(2vw) translateY(-1vw);
+    }
+    80% {
+        filter: sepia(100%) saturate(300%) hue-rotate(-50deg) brightness(70%);
+        transform: translateX(0) translateY(0);
+    }
+    100% {
+        filter: none;
+        transform: translateX(0) translateY(0);
+    }
+}
+
+@keyframes self-death {
+    0% {
+        opacity: 1;
+        filter: none;
+        transform: translateX(0) translateY(0);
+    }
+    7% {
+        opacity: 1;
+        filter: none;
+        transform: translateX(0) translateY(0);
+    }
+    14% {
+        opacity: 1;
+        filter: sepia(100%) saturate(300%) hue-rotate(-50deg) brightness(70%);
+        transform: translateX(0) translateY(0);
+    }
+    21% {
+        opacity: 1;
+        filter: sepia(100%) saturate(300%) hue-rotate(-50deg) brightness(70%);
+        transform: translateX(-2vw) translateY(1vw);
+    }
+    28% {
+        opacity: 1;
+        filter: sepia(100%) saturate(300%) hue-rotate(-50deg) brightness(70%);
+        transform: translateX(0) translateY(0);
+    }
+    35% {
+        opacity: 1;
+        filter: none;
+        transform: translateX(0) translateY(0);
+    }
+    42% {
+        opacity: 1;
+        filter: none;
+        transform: translateX(0) translateY(0);
+    }
+    49% {
+        opacity: 1;
+        filter: grayscale(100%);
+        transform: translateX(0) translateY(0);
+    }
+    56% {
+        opacity: 1;
+        filter: grayscale(100%);
+        transform: translateX(0) translateY(0);
+    }
+    100% {
+        opacity: 0;
+        filter: grayscale(100%);
+        transform: translateX(0) translateY(5vw);
+    }
+}
+
+@keyframes enemy-death {
+    0% {
+        opacity: 1;
+        filter: none;
+        transform: translateX(0) translateY(0);
+    }
+    7% {
+        opacity: 1;
+        filter: none;
+        transform: translateX(0) translateY(0);
+    }
+    14% {
+        opacity: 1;
+        filter: sepia(100%) saturate(300%) hue-rotate(-50deg) brightness(70%);
+        transform: translateX(0) translateY(0);
+    }
+    21% {
+        opacity: 1;
+        filter: sepia(100%) saturate(300%) hue-rotate(-50deg) brightness(70%);
+        transform: translateX(2vw) translateY(-1vw);
+    }
+    28% {
+        opacity: 1;
+        filter: sepia(100%) saturate(300%) hue-rotate(-50deg) brightness(70%);
+        transform: translateX(0) translateY(0);
+    }
+    35% {
+        opacity: 1;
+        filter: none;
+        transform: translateX(0) translateY(0);
+    }
+    42% {
+        opacity: 1;
+        filter: none;
+        transform: translateX(0) translateY(0);
+    }
+    49% {
+        opacity: 1;
+        filter: grayscale(100%);
+        transform: translateX(0) translateY(0);
+    }
+    56% {
+        opacity: 1;
+        filter: grayscale(100%);
+        transform: translateX(0) translateY(0);
+    }
+    100% {
+        opacity: 0;
+        filter: grayscale(100%);
+        transform: translateX(0) translateY(5vw);
+    }
+}
+
+@keyframes healing {
+    0% {
+        background-image: none;
+        filter: none;
+    }
+    10% {
+        background-image: none;
+        filter: none;
+    }
+    20% {
+        background-image: url('../../../assets/images/game/effects/healing.gif');
+        filter: none;
+    }
+    50% {
+        background-image: url('../../../assets/images/game/effects/healing.gif');
+        filter: none;
+    }
+    60% {
+        background-image: url('../../../assets/images/game/effects/healing.gif');
+        filter: sepia(100%) hue-rotate(110deg) saturate(400%) brightness(65%);
+    }
+    70% {
+        background-image: url('../../../assets/images/game/effects/healing.gif');
+        filter: sepia(100%) hue-rotate(110deg) saturate(400%) brightness(65%);
+    }
+    80% {
+        background-image: url('../../../assets/images/game/effects/healing.gif');
+        filter: none;
+    }
+    90% {
+        background-image: none;
+        filter: none;
+    }
+    100% {
+        background-image: none;
+        filter: none;
+    }
+}

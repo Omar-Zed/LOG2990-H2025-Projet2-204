@@ -1,0 +1,10 @@
+<header>
+    <div class="header-left"></div>
+    <div class="header-right"></div>
+    <div [class]="'header-center-' + stepNumber"></div>
+    <div class="header-text"><div class="title">{{ title }}</div></div>
+    <div class="header-button" (click)="onClick()">
+        <div class="button-underlay"></div>
+        <div class="button-text"><</div>
+    </div>
+</header>

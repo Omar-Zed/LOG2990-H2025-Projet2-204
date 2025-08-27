@@ -1,0 +1,71 @@
+<div
+    class="editor-page"
+    [class.grab]="editorVisualData.dragItem"
+    [style.--size]="gameDataService.gameData.mapData.size"
+    (mousedown)="onMouseDown($event)"
+    (contextmenu)="onRightClick($event)"
+    (mouseup)="onMouseUp($event)"
+    (mouseleave)="onMouseUp($event)"
+    (mousemove)="onMouseMove($event)"
+    (mouseover)="onMouseOver($event)"
+>
+    <app-header [onClick]="backButton.bind(this)" [stepNumber]="'3'" [title]="'Modifier un jeu'"></app-header>
+
+    <main>
+        <div class="editor-left">
+            <div class="left-label">Nom</div>
+            <input class="input-name" type="text" autocomplete="false" maxlength="20" [(ngModel)]="gameDataService.gameData.name" (click)="this.audioService.playEffect(this.clickValue)" />
+            <div class="left-label-small">Description</div>
+            <textarea
+                class="input-description"
+                autocomplete="false"
+                maxlength="350"
+                spellcheck="false"
+                [(ngModel)]="gameDataService.gameData.description"
+                (click)="this.audioService.playEffect(this.clickValue)"
+            ></textarea>
+            <div class="left-label-medium">Taille : {{ gameDataService.getMapSizeString() }}</div>
+            <div class="left-label-medium">Mode : {{ gameDataService.getGameModeString() }}</div>
+            <button (click)="saveButton()" class="save-button">Sauvegarder</button>
+            <button (click)="resetButton()" class="reset-button">Réinitialiser</button>
+        </div>
+        <div class="editor-center">
+            <app-map [isEditor]="true"></app-map>
+        </div>
+        <div class="editor-right">
+            <div class="tool-square">
+                <div class="tile-grid">
+                    @for (tileData of editorVisualData.tiles; track tileData) {
+                    <div class="grid-square" [attr.tile]="tileData.tile" [class.active]="tileData.isActive" (click)="this.audioService.playEffect(this.clickValue)">
+                        <div class="tool">
+                            <div class="tool-image" [style.backgroundImage]="'url(' + tileData.image + ')'"></div>
+                        </div>
+                        <div class="tool-description" [innerHTML]="tileData.description"></div>
+                    </div>
+                    }
+                </div>
+            </div>
+            <div class="tool-square">
+                <div class="item-grid">
+                    @for (itemData of editorVisualData.items; track itemData.item) {
+                    <div class="grid-square" [class.grayed]="itemData.count === 0">
+                        <div class="tool">
+                            <app-item [itemType]="itemData.item" [showDescription]="true"></app-item>
+                            @if (itemData.count) {
+                                <div class="tool-count">{{ itemData.count }}</div>
+                            }
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div
+        class="grab-item"
+        [style.top.px]="editorVisualData.dragPosition.y"
+        [style.left.px]="editorVisualData.dragPosition.x"
+        [style.backgroundImage]="'url(' + editorVisualData.dragItemImage + ')'"
+    ></div>
+</div>

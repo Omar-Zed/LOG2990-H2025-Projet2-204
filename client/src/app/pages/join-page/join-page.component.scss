@@ -1,0 +1,152 @@
+$gray-border-color: #636776;
+$wheat-border-color: #e9f6f7;
+$stripes-color1: #93d7eb;
+$stripes-color2: #ace6f6;
+$text-shadow-color: rgb(112, 112, 112);
+
+$page-border-width: 10px;
+$padding-wheat-border: 0.7vw;
+$stripes-size: 0.7vw;
+$font-size-header: 6.5vh;
+
+$font-family-title: 'pixel';
+
+$corner-square-size: 1vh;
+$clip-path: polygon(
+    $corner-square-size 0%,
+    calc(100% - #{$corner-square-size}) 0%,
+
+    calc(100% - #{$corner-square-size}) $corner-square-size,
+    100% $corner-square-size,
+
+    100% calc(100% - #{$corner-square-size}),
+    calc(100% - #{$corner-square-size}) calc(100% - #{$corner-square-size}),
+    calc(100% - #{$corner-square-size}) 100%,
+    $corner-square-size 100%,
+
+    $corner-square-size calc(100% - #{$corner-square-size}),
+    0% calc(100% - #{$corner-square-size}),
+    0% $corner-square-size,
+    $corner-square-size $corner-square-size
+);
+
+#join-page-header {
+    height: 7vh;
+}
+
+#join-page-border {
+    height: calc(100vh - 7vh);
+    border: $page-border-width solid $gray-border-color;
+}
+
+#join-page-body {
+    position: relative;
+    height: 100%;
+    overflow-y: scroll;
+    background: repeating-linear-gradient(
+        0deg,
+        $stripes-color1,
+        $stripes-color1 $stripes-size,
+        $stripes-color2 $stripes-size,
+        $stripes-color2 $stripes-size * 2
+    );
+    background-size: 100% ($stripes-size * 2);
+    animation: fall 2s linear infinite;
+    box-sizing: border-box;
+
+    border: $page-border-width solid $wheat-border-color;
+    padding: $page-border-width $page-border-width;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes fall {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 0 $stripes-size * 2;
+    }
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+#main-container {
+    position: relative;
+    background-color: #83a4fa;
+    width: 80vh;
+    aspect-ratio: 16/9;
+
+    border: calc($corner-square-size * 2) solid #48485f;
+    clip-path: $clip-path;
+
+    background-image: url('../../../assets/images/menu/containers/dark-blue/dark-blue-scrare-body.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#main-container-body {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    padding: 0.5vw;
+    box-shadow:
+        inset 0.5vw 0 0 0 #80c0d8,
+        inset -0.5vw 0 0 0 #2878b0,
+        inset 0 0.5vw 0 0 #80c0d8,
+        inset 0 -0.5vw 0 0 #2878b0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    padding: 0 0 4% 0;
+}
+
+#main-message {
+    width: 100%;
+    height: 25%;
+    font-size: 2.5vw;
+    text-shadow: 0.25vw 0 0 $text-shadow-color;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-wrap: balance;
+}
+
+#visual-input-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    height: 24%;
+}
+
+#visual-input-container .number {
+    height: 100%;
+    width: 7%;
+    margin: 0 10px;
+    border: solid white;
+    border-width: 0 0 5px 0;
+    font-size: 4rem;
+    text-shadow: 0.25vw 0 0 $text-shadow-color;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 0 0 5px;
+}
+
+#input {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    z-index: 3;
+}

@@ -1,0 +1,31 @@
+<div class="pop-up-container">
+    <div class="pop-up">
+        <div class="title">Nouveau jeu</div>
+        <div class="options">
+            <div class="option-col">
+                <div class="option-title">Taille de la grille :</div>
+                @for (size of possibleSizes; track $index) {
+                <div class="option" (click)="onSizeSelection(size.value)">
+                    <div class="check-box" [ngClass]="size.value === mapSize ? 'selected' : ''"></div>
+                    <p>{{ size.value }}x{{ size.value }}</p>
+                </div>
+                }
+            </div>
+            <div class="option-col">
+                <div class="option-title">Mode de jeu :</div>
+                @for (mode of possibleModes; track $index) {
+                <div class="option" (click)="onModeSelection(mode.value)">
+                    <div class="check-box" [ngClass]="mode.key === gameMode ? 'selected' : ''"></div>
+                    <p>{{ mode.key }}</p>
+                </div>
+                }
+            </div>
+        </div>
+        <div class="button-section">
+            <div class="button">
+                <app-pokeball-button [buttonContent]="'VALIDER'" [delay]="0" [onClickAction]="onValiderSelection.bind(this)"></app-pokeball-button>
+            </div>
+        </div>
+    </div>
+    <div class="pokemon-image"></div>
+</div>
